@@ -1,0 +1,8 @@
+.radix-themes {
+  --default-font-family: var(--fp-font-family-sans);
+  --heading-font-family: var(--fp-font-family-sans);
+  --code-font-family: var(--fp-font-family-mono);
+  --strong-font-family: var(--fp-font-family-sans);
+  --em-font-family: var(--fp-font-family-sans);
+  --quote-font-family: var(--fp-font-family-sans);
+}

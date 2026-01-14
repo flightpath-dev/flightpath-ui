@@ -1,0 +1,11 @@
+.label {
+  color: var(--gray-11);
+}
+
+.value {
+  font-family: var(--fp-font-family-mono);
+}
+
+.unit {
+  opacity: 0.6;
+}

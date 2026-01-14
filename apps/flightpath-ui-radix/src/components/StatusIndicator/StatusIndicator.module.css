@@ -1,0 +1,28 @@
+/* Base styles */
+.statusIndicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Size variants */
+.size-1 {
+  font-size: var(--font-size-1);
+  line-height: var(--line-height-1);
+  padding: 0.25rem 0.5rem;
+}
+
+.size-2 {
+  font-size: var(--font-size-2);
+  line-height: var(--line-height-2);
+  padding: 0.375rem 0.75rem;
+}
+
+.size-3 {
+  font-size: var(--font-size-3);
+  line-height: var(--line-height-3);
+  padding: 0.5rem 1rem;
+}

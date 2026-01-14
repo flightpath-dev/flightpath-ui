@@ -1,0 +1,50 @@
+{
+  "name": "flightpath-ui",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "check-types": "tsc --noEmit",
+    "clean": "rimraf node_modules dist",
+    "dev": "vite",
+    "fix": "run-s _lint:fix _format:fix",
+    "lint": "run-s _lint _format",
+    "preview": "vite preview",
+    "_format": "prettier --list-different '*.{js,ts,json,md}' 'src/**/*.{css,js,jsx,ts,tsx,json,md}'",
+    "_format:fix": "npm run _format -- --write",
+    "_lint": "eslint .",
+    "_lint:fix": "npm run _lint -- --fix"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.10.2",
+    "@connectrpc/connect": "^2.1.1",
+    "@connectrpc/connect-web": "^2.1.1",
+    "@flightpath/flightpath": "^0.0.11",
+    "@radix-ui/colors": "^3.0.0",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/themes": "^3.2.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.562.0",
+    "next-themes": "^0.4.6",
+    "observable-hooks": "^4.2.4",
+    "ol": "^10.7.0",
+    "ol-mapbox-style": "^13.2.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router": "^7.12.0",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^25.0.8",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "eslint": "^9.39.2",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1"
+  }
+}

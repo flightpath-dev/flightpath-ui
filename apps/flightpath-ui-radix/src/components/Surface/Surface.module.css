@@ -1,0 +1,130 @@
+/* Color variants */
+.color-gray {
+  background-color: var(--gray-a3);
+  color: var(--gray-a11);
+}
+
+.color-gold {
+  background-color: var(--gold-a3);
+  color: var(--gold-a11);
+}
+
+.color-bronze {
+  background-color: var(--bronze-a3);
+  color: var(--bronze-a11);
+}
+
+.color-brown {
+  background-color: var(--brown-a3);
+  color: var(--brown-a11);
+}
+
+.color-yellow {
+  background-color: var(--yellow-a3);
+  color: var(--yellow-a11);
+}
+
+.color-amber {
+  background-color: var(--amber-a3);
+  color: var(--amber-a11);
+}
+
+.color-orange {
+  background-color: var(--orange-a3);
+  color: var(--orange-a11);
+}
+
+.color-tomato {
+  background-color: var(--tomato-a3);
+  color: var(--tomato-a11);
+}
+
+.color-red {
+  background-color: var(--red-a3);
+  color: var(--red-a11);
+}
+
+.color-ruby {
+  background-color: var(--ruby-a3);
+  color: var(--ruby-a11);
+}
+
+.color-crimson {
+  background-color: var(--crimson-a3);
+  color: var(--crimson-a11);
+}
+
+.color-pink {
+  background-color: var(--pink-a3);
+  color: var(--pink-a11);
+}
+
+.color-plum {
+  background-color: var(--plum-a3);
+  color: var(--plum-a11);
+}
+
+.color-purple {
+  background-color: var(--purple-a3);
+  color: var(--purple-a11);
+}
+
+.color-violet {
+  background-color: var(--violet-a3);
+  color: var(--violet-a11);
+}
+
+.color-iris {
+  background-color: var(--iris-a3);
+  color: var(--iris-a11);
+}
+
+.color-indigo {
+  background-color: var(--indigo-a3);
+  color: var(--indigo-a11);
+}
+
+.color-blue {
+  background-color: var(--blue-a3);
+  color: var(--blue-a11);
+}
+
+.color-cyan {
+  background-color: var(--cyan-a3);
+  color: var(--cyan-a11);
+}
+
+.color-teal {
+  background-color: var(--teal-a3);
+  color: var(--teal-a11);
+}
+
+.color-jade {
+  background-color: var(--jade-a3);
+  color: var(--jade-a11);
+}
+
+.color-green {
+  background-color: var(--green-a3);
+  color: var(--green-a11);
+}
+
+.color-grass {
+  background-color: var(--grass-a3);
+  color: var(--grass-a11);
+}
+
+.color-lime {
+  background-color: var(--lime-a3);
+  color: var(--lime-a11);
+}
+
+.color-mint {
+  background-color: var(--mint-a3);
+  color: var(--mint-a11);
+}
+
+.color-sky {
+  background-color: var(--sky-a3);
+  color: var(--sky-a11);
+}

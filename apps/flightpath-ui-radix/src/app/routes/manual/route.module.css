@@ -1,0 +1,6 @@
+.flightCommandPanel {
+  position: fixed;
+  top: 72px;
+  left: 1rem;
+  z-index: 40;
+}
