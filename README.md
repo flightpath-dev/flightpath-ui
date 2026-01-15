@@ -1,7 +1,6 @@
 # Flightpath UI
 
-Frontend for the Flightpath platform – a Ground Control Station (GCS) to control
-a drone.
+Ground Control Station for [Flightpath](https://github.com/flightpath-dev/flightpath)
 
 ![Screenshot](assets/screenshot.png)
 

@@ -1,6 +1,6 @@
 {
   "name": "flightpath-ui",
-  "description": "Frontend for the Flightpath platform - a Ground Control Station (GCS) to control a drone.",
+  "description": "Ground Control Station for Flightpath",
   "version": "0.0.1",
   "private": true,
   "repository": {
