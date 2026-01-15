@@ -9,6 +9,24 @@ a drone.
 
 ![architecture](./assets/flightpath-ui-architecture.png)
 
+The architecture uses RxJS observables as a reactive layer between the MAVLink
+protocol and React components. This approach provides several key benefits:
+
+1. **Declarative Logic & Cleaner Code**: Instead of imperative `useEffect`
+   chains, RxJS defines data transformations declaratively. This centralizes
+   business logic outside of components, making the code more readable and
+   easier to maintain. See `FlightStatusService` as an example.
+
+2. **Efficient State Propagation**: Updates are only propagated to the specific
+   components that subscribe to a stream. This avoids the "unnecessary
+   re-render" issue common with React Context, where updating one value can
+   re-render an entire component tree.
+
+3. **Decoupled Architecture**: Business logic is kept in pure TypeScript classes
+   as observables, entirely independent of React. This makes the logic more
+   portable and significantly easier to unit test without the overhead of
+   rendering components.
+
 ## Prerequisites for development
 
 1. Install [Node Version Manager](https://github.com/nvm-sh/nvm) (nvm). It
