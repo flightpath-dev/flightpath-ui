@@ -42,6 +42,7 @@ export interface MAVLinkService extends Service {
   sendTakeoffCommand: (
     targetSystemId: number,
     targetComponentId: number,
+    relativeAltitudeMeters: number,
   ) => Promise<void>;
   sendReturnToLaunchCommand: (
     targetSystemId: number,

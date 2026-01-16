@@ -1,16 +1,13 @@
 # Project Instructions
 
-This project is the frontend for the Flightpath platform – a Ground Control
-Station (GCS) to control a drone.
+This project is the ground control station for [Flightpath](https://github.com/flightpath-dev/flightpath). It uses gRPC to send MAVLink commands to the Flightpath server and receive MAVLink messages from the server.
 
-## Tech Stack & Reference Documentation
-
-Here are the important references for documentation for our tech stack:
+## Reference Documentation
 
 - [MAVLink Protocol](https://mavlink.io/en/): Used to control the drone.
--
+- [gomavlib](https://github.com/bluenviron/gomavlib): The Go library used by the Flightpath server to send MAVLink commands to the drone and receive MAVLink messages. Use these docs to understand the server capabilities. Especially, look at the [examples](https://github.com/bluenviron/gomavlib/tree/main/examples) directory to understand MAVLink workflows to achieve specific goals.
 
-## Code Style
+## Coding Style
 
 - Use TypeScript for all new files
 

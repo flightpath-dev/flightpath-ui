@@ -29,7 +29,7 @@ export function ManualView() {
       await mavlinkService.sendArmCommand(systemId, componentId);
 
       // Send takeoff command
-      await mavlinkService.sendTakeoffCommand(systemId, componentId);
+      await mavlinkService.sendTakeoffCommand(systemId, componentId, 3.048); // 10 feet
     } catch (error) {
       console.error('Error sending takeoff command:', error);
     }
