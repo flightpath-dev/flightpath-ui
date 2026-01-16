@@ -1,13 +1,6 @@
 import { create } from '@bufbuild/protobuf';
 import { createClient } from '@connectrpc/connect';
-import {
-  MainMode,
-  SubMode,
-} from '@flightpath/flightpath/gen/ts/flightpath/heartbeat_pb.js';
-import {
-  MavCmd,
-  MavModeFlag,
-} from '@flightpath/flightpath/gen/ts/flightpath/mavlink_commands_pb.js';
+import { MavCmd } from '@flightpath/flightpath/gen/ts/flightpath/mavlink_commands_pb.js';
 import {
   MAVLinkService as MAVLinkServiceClient,
   MavlinkMessageType,
@@ -437,7 +430,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   }
 
   /**
-   * Send return to launch command by setting mode to AUTO/RTL
+   * Send return to launch command
    * @param targetSystemId - Target system ID
    * @param targetComponentId - Target component ID
    */
@@ -448,10 +441,10 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     const request = create(SendCommandRequestSchema, {
       targetSystemId,
       targetComponentId,
-      command: MavCmd.DO_SET_MODE,
-      param1: MavModeFlag.SAFETY_ARMED | MavModeFlag.CUSTOM_MODE_ENABLED, // 128 | 1 = 129
-      param2: MainMode.AUTO,
-      param3: SubMode.AUTO_RTL,
+      command: MavCmd.NAV_RETURN_TO_LAUNCH,
+      param1: 0.0,
+      param2: 0.0,
+      param3: 0.0,
       param4: 0.0,
       param5: 0.0,
       param6: 0.0,
