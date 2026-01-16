@@ -61,12 +61,10 @@ export function TakeoffDialog({ onTakeoff, trigger }: TakeoffDialogProps) {
               Cancel
             </Button>
           </Dialog.Close>
-          <Dialog.Close>
-            <Button variant="solid" color="blue" onClick={handleConfirm}>
-              <ArrowUp size={16} />
-              Confirm Takeoff
-            </Button>
-          </Dialog.Close>
+          <Button variant="solid" color="blue" onClick={handleConfirm}>
+            <ArrowUp size={16} />
+            Confirm Takeoff
+          </Button>
         </Flex>
       </Dialog.Content>
     </Dialog.Root>
