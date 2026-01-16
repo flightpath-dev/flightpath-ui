@@ -12,6 +12,8 @@ import {
 
 import styles from './route.module.css';
 
+const FEET_TO_METERS = 0.3048;
+
 export function ManualView() {
   const position = usePosition2D();
   const flightStatus = useFlightStatus();
@@ -19,7 +21,7 @@ export function ManualView() {
   const componentId = useComponentId();
   const mavlinkService = useMAVLinkService();
 
-  const handleTakeoff = async () => {
+  const handleTakeoff = async (altitudeFt: number) => {
     if (systemId === null || componentId === null) {
       return;
     }
@@ -28,8 +30,13 @@ export function ManualView() {
       // Arm the drone
       await mavlinkService.sendArmCommand(systemId, componentId);
 
-      // Send takeoff command
-      await mavlinkService.sendTakeoffCommand(systemId, componentId, 3.048); // 10 feet
+      // Convert feet to meters and send takeoff command
+      const altitudeMeters = altitudeFt * FEET_TO_METERS;
+      await mavlinkService.sendTakeoffCommand(
+        systemId,
+        componentId,
+        altitudeMeters,
+      );
     } catch (error) {
       console.error('Error sending takeoff command:', error);
     }

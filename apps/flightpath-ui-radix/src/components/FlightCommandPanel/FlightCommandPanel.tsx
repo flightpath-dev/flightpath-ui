@@ -1,5 +1,7 @@
-import { AlertDialog, Button, Flex, Text } from '@radix-ui/themes';
+import { Flex, Text } from '@radix-ui/themes';
 import { ArrowUp, Home } from 'lucide-react';
+
+import { TakeoffDialog } from './TakeoffDialog';
 
 import type { FlightState } from '../../types/FlightStatus';
 
@@ -7,7 +9,7 @@ import styles from './FlightCommandPanel.module.css';
 
 interface FlightCommandPanelProps {
   flightState: FlightState;
-  onTakeoff: () => void;
+  onTakeoff: (altitudeFt: number) => void;
   onReturn: () => void;
   className?: string;
   disabled?: boolean;
@@ -26,8 +28,9 @@ export default function FlightCommandPanel({
       direction="column"
       gap="1"
     >
-      <AlertDialog.Root>
-        <AlertDialog.Trigger>
+      <TakeoffDialog
+        onTakeoff={onTakeoff}
+        trigger={
           <button
             className={styles.button}
             disabled={disabled || flightState !== 'readyToFly'}
@@ -39,28 +42,8 @@ export default function FlightCommandPanel({
               </Text>
             </Flex>
           </button>
-        </AlertDialog.Trigger>
-        <AlertDialog.Content maxWidth="450px">
-          <AlertDialog.Title>Clear for Takeoff?</AlertDialog.Title>
-          <AlertDialog.Description size="2">
-            Confirm that the drone is outdoors with clear airspace above it. The
-            drone will take off immediately upon confirmation.
-          </AlertDialog.Description>
-
-          <Flex gap="3" mt="4" justify="end">
-            <AlertDialog.Cancel>
-              <Button variant="soft" color="gray">
-                Cancel
-              </Button>
-            </AlertDialog.Cancel>
-            <AlertDialog.Action>
-              <Button variant="solid" color="red" onClick={onTakeoff}>
-                Takeoff
-              </Button>
-            </AlertDialog.Action>
-          </Flex>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
+        }
+      />
 
       <div className={styles.divider} />
 
