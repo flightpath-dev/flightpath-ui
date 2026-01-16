@@ -400,25 +400,37 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   }
 
   /**
-   * Send takeoff command by setting mode to AUTO/TAKEOFF
+   * Send takeoff command with specified altitude relative to current position
    * @param targetSystemId - Target system ID
    * @param targetComponentId - Target component ID
+   * @param relativeAltitudeMeters - Target altitude in meters above current position
    */
   public async sendTakeoffCommand(
     targetSystemId: number,
     targetComponentId: number,
+    relativeAltitudeMeters: number,
   ): Promise<void> {
+    // Get current MSL altitude from latest position data
+    const globalPosition = this.globalPositionIntSubject.getValue();
+    if (!globalPosition) {
+      throw new Error('Cannot takeoff: no GPS position available');
+    }
+
+    // Convert current MSL altitude from mm to meters and add relative altitude
+    const currentMslMeters = globalPosition.alt / 1000;
+    const targetMslMeters = currentMslMeters + relativeAltitudeMeters;
+
     const request = create(SendCommandRequestSchema, {
       targetSystemId,
       targetComponentId,
-      command: MavCmd.DO_SET_MODE,
-      param1: MavModeFlag.SAFETY_ARMED | MavModeFlag.CUSTOM_MODE_ENABLED, // 128 | 1 = 129
-      param2: MainMode.AUTO,
-      param3: SubMode.AUTO_TAKEOFF,
-      param4: 0.0,
-      param5: 0.0,
-      param6: 0.0,
-      param7: 0.0,
+      command: MavCmd.NAV_TAKEOFF,
+      param1: 0.0, // Minimum pitch (fixed-wing only)
+      param2: 0.0, // Empty
+      param3: 0.0, // Empty
+      param4: NaN, // Yaw angle (NaN = use current heading)
+      param5: NaN, // Latitude (NaN = use current position)
+      param6: NaN, // Longitude (NaN = use current position)
+      param7: targetMslMeters, // Target altitude in meters (MSL)
     });
 
     await this.sendCommand(request);
