@@ -14,7 +14,7 @@ import styles from './route.module.css';
 
 const FEET_TO_METERS = 0.3048;
 
-export function ManualView() {
+export function FlyView() {
   const position = usePosition2D();
   const flightStatus = useFlightStatus();
   const systemId = useSystemId();

@@ -12,18 +12,18 @@ export interface NavItem {
 
 export const mainNavItems: NavItem[] = [
   {
-    title: 'Manual',
+    title: 'Fly',
     icon: Joystick,
-    path: RoutePath.Manual,
+    path: RoutePath.Fly,
   },
   {
-    title: 'Mission',
+    title: 'Plan',
     icon: Waypoints,
-    path: RoutePath.Mission,
+    path: RoutePath.Plan,
   },
   {
-    title: 'Guided',
+    title: 'Guide',
     icon: Cpu,
-    path: RoutePath.Guided,
+    path: RoutePath.Guide,
   },
 ];
