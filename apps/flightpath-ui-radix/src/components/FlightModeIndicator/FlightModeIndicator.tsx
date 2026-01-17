@@ -45,9 +45,5 @@ export function FlightModeIndicator({ mode }: FlightModeIndicatorProps) {
   const modeColor = MODE_COLOR_MAP[mode] ?? 'gray';
   const displayText = MODE_DISPLAY_TEXT_MAP[mode] ?? mode;
 
-  return (
-    <StatusIndicator color={modeColor} size="2">
-      {displayText}
-    </StatusIndicator>
-  );
+  return <StatusIndicator color={modeColor}>{displayText}</StatusIndicator>;
 }

@@ -18,7 +18,7 @@ const STATUS_DISPLAY_TEXT_MAP: Record<FlightState, string> = {
 
 export function FlightStatusIndicator({ status }: FlightStatusIndicatorProps) {
   return (
-    <StatusIndicator color={severityToColor(status.severity)} size="2">
+    <StatusIndicator color={severityToColor(status.severity)}>
       {STATUS_DISPLAY_TEXT_MAP[status.state]}
     </StatusIndicator>
   );

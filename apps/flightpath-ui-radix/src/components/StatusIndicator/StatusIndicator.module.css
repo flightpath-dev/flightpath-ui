@@ -3,7 +3,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-width: 2px;
+  border-radius: var(--radius-2);
+  font-family: var(--fp-font-family-mono);
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   white-space: nowrap;
   user-select: none;
 }
