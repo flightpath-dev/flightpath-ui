@@ -1,9 +1,9 @@
 import { Navigate } from 'react-router';
 
 import { RootLayout } from './app/root';
-import { GuidedView } from './app/routes/guided/route';
-import { ManualView } from './app/routes/manual/route';
-import { MissionView } from './app/routes/mission/route';
+import { FlyView } from './app/routes/fly/route';
+import { GuideView } from './app/routes/guide/route';
+import { PlanView } from './app/routes/plan/route';
 import { RoutePath } from './config/RoutePath';
 
 import type { RouteObject } from 'react-router';
@@ -14,19 +14,19 @@ export const routes: RouteObject[] = [
     children: [
       {
         path: RoutePath.Root,
-        element: <Navigate replace to={RoutePath.Manual} />,
+        element: <Navigate replace to={RoutePath.Fly} />,
       },
       {
-        path: RoutePath.Manual,
-        element: <ManualView />,
+        path: RoutePath.Fly,
+        element: <FlyView />,
       },
       {
-        path: RoutePath.Mission,
-        element: <MissionView />,
+        path: RoutePath.Plan,
+        element: <PlanView />,
       },
       {
-        path: RoutePath.Guided,
-        element: <GuidedView />,
+        path: RoutePath.Guide,
+        element: <GuideView />,
       },
     ],
   },

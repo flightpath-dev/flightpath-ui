@@ -1,6 +1,6 @@
 export enum RoutePath {
   Root = '/',
-  Manual = '/manual',
-  Mission = '/mission',
-  Guided = '/guided',
+  Fly = '/fly',
+  Plan = '/plan',
+  Guide = '/guide',
 }

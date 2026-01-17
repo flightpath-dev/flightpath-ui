@@ -2,7 +2,7 @@ import { Card, Flex, Heading, Text } from '@radix-ui/themes';
 
 import styles from './route.module.css';
 
-export function MissionView() {
+export function PlanView() {
   return (
     <Flex
       align="center"
