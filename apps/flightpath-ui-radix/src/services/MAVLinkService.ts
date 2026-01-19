@@ -5,9 +5,13 @@ import type { GlobalPositionInt } from '@flightpath/flightpath/gen/ts/flightpath
 import type { GpsRawInt } from '@flightpath/flightpath/gen/ts/flightpath/gps_raw_int_pb.js';
 import type { Heartbeat } from '@flightpath/flightpath/gen/ts/flightpath/heartbeat_pb.js';
 import type {
-  SendCommandRequest,
-  SendCommandResponse,
+  SendCommandIntRequest,
+  SendCommandIntResponse,
+  SendCommandLongRequest,
+  SendCommandLongResponse,
 } from '@flightpath/flightpath/gen/ts/flightpath/mavlink_service_pb.js';
+import type { MissionCurrent } from '@flightpath/flightpath/gen/ts/flightpath/mission_current_pb.js';
+import type { MissionItemReached } from '@flightpath/flightpath/gen/ts/flightpath/mission_item_reached_pb.js';
 import type { RadioStatus } from '@flightpath/flightpath/gen/ts/flightpath/radio_status_pb.js';
 import type { StatusText } from '@flightpath/flightpath/gen/ts/flightpath/statustext_pb.js';
 import type { SysStatus } from '@flightpath/flightpath/gen/ts/flightpath/sys_status_pb.js';
@@ -24,6 +28,8 @@ export interface MAVLinkService extends Service {
   gpsRawInt$: Observable<GpsRawInt | null>;
   radioStatus$: Observable<RadioStatus | null>;
   vfrHud$: Observable<VfrHud | null>;
+  missionCurrent$: Observable<MissionCurrent | null>;
+  missionItemReached$: Observable<MissionItemReached | null>;
 
   // Transformed observables (only emit when value changes)
   flightMode$: Observable<FlightMode>;
@@ -34,17 +40,31 @@ export interface MAVLinkService extends Service {
   componentId$: Observable<number | null>;
 
   // Command methods
-  sendCommand: (request: SendCommandRequest) => Promise<SendCommandResponse>;
+  sendCommandLong: (
+    request: SendCommandLongRequest,
+  ) => Promise<SendCommandLongResponse>;
+
+  sendCommandInt: (
+    request: SendCommandIntRequest,
+  ) => Promise<SendCommandIntResponse>;
+
   sendArmCommand: (
     targetSystemId: number,
     targetComponentId: number,
   ) => Promise<void>;
+
   sendTakeoffCommand: (
     targetSystemId: number,
     targetComponentId: number,
     relativeAltitudeMeters: number,
   ) => Promise<void>;
+
   sendReturnToLaunchCommand: (
+    targetSystemId: number,
+    targetComponentId: number,
+  ) => Promise<void>;
+
+  sendMissionStartCommand: (
     targetSystemId: number,
     targetComponentId: number,
   ) => Promise<void>;

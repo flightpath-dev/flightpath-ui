@@ -1,10 +1,14 @@
 import { create } from '@bufbuild/protobuf';
 import { createClient } from '@connectrpc/connect';
-import { MavCmd } from '@flightpath/flightpath/gen/ts/flightpath/mavlink_commands_pb.js';
+import {
+  MavCmd,
+  MavFrame,
+} from '@flightpath/flightpath/gen/ts/flightpath/mavlink_commands_pb.js';
 import {
   MAVLinkService as MAVLinkServiceClient,
   MavlinkMessageType,
-  SendCommandRequestSchema,
+  SendCommandIntRequestSchema,
+  SendCommandLongRequestSchema,
 } from '@flightpath/flightpath/gen/ts/flightpath/mavlink_service_pb.js';
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 
@@ -18,9 +22,13 @@ import type { GlobalPositionInt } from '@flightpath/flightpath/gen/ts/flightpath
 import type { GpsRawInt } from '@flightpath/flightpath/gen/ts/flightpath/gps_raw_int_pb.js';
 import type { Heartbeat } from '@flightpath/flightpath/gen/ts/flightpath/heartbeat_pb.js';
 import type {
-  SendCommandRequest,
-  SendCommandResponse,
+  SendCommandIntRequest,
+  SendCommandIntResponse,
+  SendCommandLongRequest,
+  SendCommandLongResponse,
 } from '@flightpath/flightpath/gen/ts/flightpath/mavlink_service_pb.js';
+import type { MissionCurrent } from '@flightpath/flightpath/gen/ts/flightpath/mission_current_pb.js';
+import type { MissionItemReached } from '@flightpath/flightpath/gen/ts/flightpath/mission_item_reached_pb.js';
 import type { RadioStatus } from '@flightpath/flightpath/gen/ts/flightpath/radio_status_pb.js';
 import type { StatusText } from '@flightpath/flightpath/gen/ts/flightpath/statustext_pb.js';
 import type { SysStatus } from '@flightpath/flightpath/gen/ts/flightpath/sys_status_pb.js';
@@ -63,6 +71,10 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     null,
   );
   private readonly vfrHudSubject = new BehaviorSubject<VfrHud | null>(null);
+  private readonly missionCurrentSubject =
+    new BehaviorSubject<MissionCurrent | null>(null);
+  private readonly missionItemReachedSubject =
+    new BehaviorSubject<MissionItemReached | null>(null);
   private readonly systemIdSubject = new BehaviorSubject<number | null>(null);
   private readonly componentIdSubject = new BehaviorSubject<number | null>(
     null,
@@ -77,6 +89,8 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   public gpsRawInt$: Observable<GpsRawInt | null>;
   public radioStatus$: Observable<RadioStatus | null>;
   public vfrHud$: Observable<VfrHud | null>;
+  public missionCurrent$: Observable<MissionCurrent | null>;
+  public missionItemReached$: Observable<MissionItemReached | null>;
 
   // Transformed observables - only emit when value changes
   public flightMode$: Observable<FlightMode>;
@@ -110,6 +124,8 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     this.gpsRawInt$ = this.gpsRawIntSubject.asObservable();
     this.radioStatus$ = this.radioStatusSubject.asObservable();
     this.vfrHud$ = this.vfrHudSubject.asObservable();
+    this.missionCurrent$ = this.missionCurrentSubject.asObservable();
+    this.missionItemReached$ = this.missionItemReachedSubject.asObservable();
 
     // Transform and deduplicate FlightMode - only emit when value changes
     this.flightMode$ = this.heartbeat$.pipe(
@@ -256,6 +272,18 @@ export class MAVLinkServiceImpl implements MAVLinkService {
               this.vfrHudSubject.next(response.message.value);
             }
             break;
+
+          case MavlinkMessageType.MISSION_CURRENT:
+            if (response.message.case === 'missionCurrent') {
+              this.missionCurrentSubject.next(response.message.value);
+            }
+            break;
+
+          case MavlinkMessageType.MISSION_ITEM_REACHED:
+            if (response.message.case === 'missionItemReached') {
+              this.missionItemReachedSubject.next(response.message.value);
+            }
+            break;
           case MavlinkMessageType.UNSPECIFIED:
           default:
             console.warn(
@@ -278,6 +306,8 @@ export class MAVLinkServiceImpl implements MAVLinkService {
       this.gpsRawIntSubject.next(null);
       this.radioStatusSubject.next(null);
       this.vfrHudSubject.next(null);
+      this.missionCurrentSubject.next(null);
+      this.missionItemReachedSubject.next(null);
     }
   }
 
@@ -310,6 +340,8 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     this.gpsRawIntSubject.next(null);
     this.radioStatusSubject.next(null);
     this.vfrHudSubject.next(null);
+    this.missionCurrentSubject.next(null);
+    this.missionItemReachedSubject.next(null);
   }
 
   /**
@@ -344,15 +376,39 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   // ========== Command Methods ==========
 
   /**
-   * Send a MAVLink command to the drone
+   * Send a MAVLink COMMAND_LONG to the drone
    * @param request - The command request
    * @returns The command response
    */
-  public async sendCommand(
-    request: SendCommandRequest,
-  ): Promise<SendCommandResponse> {
+  public async sendCommandLong(
+    request: SendCommandLongRequest,
+  ): Promise<SendCommandLongResponse> {
     try {
-      const response = await this.client.sendCommand(request);
+      const response = await this.client.sendCommandLong(request);
+
+      if (!response.success) {
+        throw new Error(
+          `Command failed: ${response.errorMessage ?? 'Unknown error'}`,
+        );
+      }
+
+      return response;
+    } catch (error) {
+      console.error('[MAVLinkService] Error sending command:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send a MAVLink COMMAND_INT to the drone
+   * @param request - The command request
+   * @returns The command response
+   */
+  public async sendCommandInt(
+    request: SendCommandIntRequest,
+  ): Promise<SendCommandIntResponse> {
+    try {
+      const response = await this.client.sendCommandInt(request);
 
       if (!response.success) {
         throw new Error(
@@ -376,20 +432,20 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     targetSystemId: number,
     targetComponentId: number,
   ): Promise<void> {
-    const request = create(SendCommandRequestSchema, {
+    const request = create(SendCommandLongRequestSchema, {
       targetSystemId,
       targetComponentId,
       command: MavCmd.COMPONENT_ARM_DISARM,
       param1: 1.0, // 1 to arm, 0 to disarm
       param2: 0.0, // 0 = normal arming (not force)
-      param3: 0.0,
-      param4: 0.0,
-      param5: 0.0,
-      param6: 0.0,
-      param7: 0.0,
+      param3: 0.0, // Unused
+      param4: 0.0, // Unused
+      param5: 0.0, // Unused
+      param6: 0.0, // Unused
+      param7: 0.0, // Unused
     });
 
-    await this.sendCommand(request);
+    await this.sendCommandLong(request);
   }
 
   /**
@@ -413,20 +469,21 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     const currentMslMeters = globalPosition.alt / 1000;
     const targetMslMeters = currentMslMeters + relativeAltitudeMeters;
 
-    const request = create(SendCommandRequestSchema, {
+    const request = create(SendCommandIntRequestSchema, {
       targetSystemId,
       targetComponentId,
+      frame: MavFrame.GLOBAL_INT,
       command: MavCmd.NAV_TAKEOFF,
       param1: 0.0, // Minimum pitch (fixed-wing only)
       param2: 0.0, // Empty
       param3: 0.0, // Empty
       param4: NaN, // Yaw angle (NaN = use current heading)
-      param5: NaN, // Latitude (NaN = use current position)
-      param6: NaN, // Longitude (NaN = use current position)
-      param7: targetMslMeters, // Target altitude in meters (MSL)
+      x: globalPosition.lat, // Latitude (degrees * 1E7)
+      y: globalPosition.lon, // Longitude (degrees * 1E7)
+      z: targetMslMeters, // Target altitude in meters (MSL)
     });
 
-    await this.sendCommand(request);
+    await this.sendCommandInt(request);
   }
 
   /**
@@ -438,19 +495,44 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     targetSystemId: number,
     targetComponentId: number,
   ): Promise<void> {
-    const request = create(SendCommandRequestSchema, {
+    const request = create(SendCommandLongRequestSchema, {
       targetSystemId,
       targetComponentId,
       command: MavCmd.NAV_RETURN_TO_LAUNCH,
-      param1: 0.0,
-      param2: 0.0,
-      param3: 0.0,
-      param4: 0.0,
-      param5: 0.0,
-      param6: 0.0,
-      param7: 0.0,
+      param1: 0.0, // Unused
+      param2: 0.0, // Unused
+      param3: 0.0, // Unused
+      param4: 0.0, // Unused
+      param5: 0.0, // Unused
+      param6: 0.0, // Unused
+      param7: 0.0, // Unused
     });
 
-    await this.sendCommand(request);
+    await this.sendCommandLong(request);
+  }
+
+  /**
+   * Send mission start command
+   * @param targetSystemId - Target system ID
+   * @param targetComponentId - Target component ID
+   */
+  public async sendMissionStartCommand(
+    targetSystemId: number,
+    targetComponentId: number,
+  ): Promise<void> {
+    const request = create(SendCommandLongRequestSchema, {
+      targetSystemId,
+      targetComponentId,
+      command: MavCmd.MISSION_START,
+      param1: 0.0, // Unused
+      param2: 0.0, // Unused
+      param3: 0.0, // Unused
+      param4: 0.0, // Unused
+      param5: 0.0, // Unused
+      param6: 0.0, // Unused
+      param7: 0.0, // Unused
+    });
+
+    await this.sendCommandLong(request);
   }
 }
