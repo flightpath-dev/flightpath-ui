@@ -14,6 +14,7 @@ import type { ExtendedSysState } from '@flightpath/flightpath/gen/ts/flightpath/
 import type { GlobalPositionInt } from '@flightpath/flightpath/gen/ts/flightpath/global_position_int_pb.js';
 import type { GpsRawInt } from '@flightpath/flightpath/gen/ts/flightpath/gps_raw_int_pb.js';
 import type { Heartbeat } from '@flightpath/flightpath/gen/ts/flightpath/heartbeat_pb.js';
+import type { MissionCurrent } from '@flightpath/flightpath/gen/ts/flightpath/mission_current_pb.js';
 import type { RadioStatus } from '@flightpath/flightpath/gen/ts/flightpath/radio_status_pb.js';
 import type { StatusText } from '@flightpath/flightpath/gen/ts/flightpath/statustext_pb.js';
 import type { SysStatus } from '@flightpath/flightpath/gen/ts/flightpath/sys_status_pb.js';
@@ -92,6 +93,11 @@ export function useRemoteRssi(): number {
 export function useVfrHud(): VfrHud | null {
   const { mavlinkService } = useServices();
   return useObservableState(mavlinkService.vfrHud$, null);
+}
+
+export function useMissionCurrent(): MissionCurrent | null {
+  const { mavlinkService } = useServices();
+  return useObservableState(mavlinkService.missionCurrent$, null);
 }
 
 export function useSystemId(): number | null {

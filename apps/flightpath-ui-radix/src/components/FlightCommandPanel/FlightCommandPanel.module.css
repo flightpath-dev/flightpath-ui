@@ -31,9 +31,33 @@
   cursor: not-allowed;
 }
 
+.missionButtonLoaded {
+  color: var(--green-11);
+}
+
+.missionButtonActive {
+  color: var(--amber-11);
+}
+
+.missionButtonLoaded svg {
+  color: var(--green-11);
+}
+
+.missionButtonActive svg {
+  color: var(--amber-11);
+}
+
 .label {
   font-size: 0.625rem; /* text-[10px] */
   line-height: 1.25; /* leading-tight */
+}
+
+.missionLabelLoaded {
+  color: var(--green-11);
+}
+
+.missionLabelActive {
+  color: var(--amber-11);
 }
 
 .divider {

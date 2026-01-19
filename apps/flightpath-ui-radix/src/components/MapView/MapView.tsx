@@ -14,8 +14,7 @@ import View from 'ol/View';
 import { apply } from 'ol-mapbox-style';
 
 import { config } from '../../config/AppConfig';
-
-import type { Position2D } from '../../types/Position2D';
+import { usePosition2D } from '../../providers/useServices';
 
 // CSS imports - order matters (ol.css must come before module.css)
 
@@ -49,14 +48,11 @@ const DRONE_ICON_DATA_URL = `data:image/svg+xml;charset=utf-8,${encodeURICompone
   DRONE_ICON_SVG,
 )}`;
 
-interface MapViewProps {
-  position: Position2D;
-}
-
-export function MapView({ position }: MapViewProps) {
+export function MapView() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const droneMarkerRef = useRef<Feature | null>(null);
+  const position = usePosition2D();
 
   // Initialize map
   useEffect(() => {
