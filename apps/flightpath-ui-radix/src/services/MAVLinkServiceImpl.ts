@@ -63,6 +63,10 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     connectTransport,
   );
 
+  // Unit conversion constants
+  private static readonly MM_TO_FEET = 0.00328084;
+  private static readonly MS_TO_MPH = 2.23694;
+
   // Internal state management - 8 BehaviorSubjects for each message type
   private readonly heartbeatSubject = new BehaviorSubject<Heartbeat | null>(
     null,
@@ -113,6 +117,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   public systemId$: Observable<number | null>;
   public componentId$: Observable<number | null>;
   public missionProgress$: Observable<MissionProgress>;
+  public flightTime$: Observable<number>;
 
   // Composite observables (derived from multiple message types)
   public position2D$: Observable<Position2D>;
@@ -201,33 +206,10 @@ export class MAVLinkServiceImpl implements MAVLinkService {
       ),
     );
 
-    // ========== Composite Observables ==========
-
-    // Position2D observable - derived from GlobalPositionInt
-    this.position2D$ = this.globalPositionInt$.pipe(
-      map((globalPositionInt) => this.derivePosition2D(globalPositionInt)),
-      distinctUntilChanged(
-        (prev, curr) =>
-          // Only emit when position or heading actually changes
-          prev.lat === curr.lat &&
-          prev.lon === curr.lon &&
-          prev.heading === curr.heading,
-      ),
-    );
-
-    // Telemetry observable - combines Heartbeat, GlobalPositionInt, and VfrHud
-    const telemetryData$ = combineLatest([
-      this.heartbeat$,
-      this.globalPositionInt$,
-      this.vfrHud$,
-    ]);
-
-    // Create an interval that emits every second for flight time updates
+    // Transform and deduplicate flight time - only emit when value changes
     const timer$ = interval(1000).pipe(startWith(0));
-
-    // Combine data with timer to update telemetry every second
-    this.telemetry$ = combineLatest([telemetryData$, timer$]).pipe(
-      map(([[heartbeat, globalPositionInt, vfrHud]]) => {
+    this.flightTime$ = combineLatest([this.heartbeat$, timer$]).pipe(
+      map(([heartbeat]) => {
         const isArmed = heartbeat?.baseMode?.safetyArmed ?? false;
 
         // Track when armed state becomes true
@@ -242,8 +224,50 @@ export class MAVLinkServiceImpl implements MAVLinkService {
           this.armedStartTime = null;
         }
 
-        return this.deriveTelemetry(heartbeat, globalPositionInt, vfrHud);
+        // Calculate current flight time
+        const flightTime =
+          isArmed && this.armedStartTime !== null
+            ? (Date.now() - this.armedStartTime) / 1000
+            : this.lastFlightTime;
+
+        // Round to nearest second for distinctUntilChanged comparison
+        return Math.round(flightTime);
       }),
+      distinctUntilChanged(), // Only emit when flight time actually changes
+    );
+
+    // ========== Composite Observables ==========
+
+    // Position2D observable - derived from GlobalPositionInt
+    this.position2D$ = this.globalPositionInt$.pipe(
+      map((globalPositionInt) => this.derivePosition2D(globalPositionInt)),
+      distinctUntilChanged(
+        (prev, curr) =>
+          // Only emit when position or heading actually changes
+          prev.lat === curr.lat &&
+          prev.lon === curr.lon &&
+          prev.heading === curr.heading,
+      ),
+    );
+
+    // Telemetry observable - combines GlobalPositionInt and VfrHud
+    this.telemetry$ = combineLatest([
+      this.globalPositionInt$,
+      this.vfrHud$,
+    ]).pipe(
+      map(([globalPositionInt, vfrHud]) =>
+        this.deriveTelemetry(globalPositionInt, vfrHud),
+      ),
+      distinctUntilChanged(
+        (a, b) =>
+          // Only emit when any telemetry value actually changes
+          a.mslAltitude === b.mslAltitude &&
+          a.relativeAltitude === b.relativeAltitude &&
+          a.groundSpeed === b.groundSpeed &&
+          a.climb === b.climb &&
+          a.heading === b.heading &&
+          a.throttle === b.throttle,
+      ),
     );
 
     // FlightStatus observable - combines Heartbeat, SysStatus, and ExtendedSysState
@@ -518,53 +542,53 @@ export class MAVLinkServiceImpl implements MAVLinkService {
    * @private
    */
   private deriveTelemetry(
-    heartbeat: Heartbeat | null,
     globalPositionInt: GlobalPositionInt | null,
     vfrHud: VfrHud | null,
   ): Telemetry {
-    // Calculate flight time (will be updated by interval)
-    const isArmed = heartbeat?.baseMode?.safetyArmed ?? false;
-    const flightTime =
-      isArmed && this.armedStartTime !== null
-        ? (Date.now() - this.armedStartTime) / 1000
-        : this.lastFlightTime;
-
     /*
      * Convert MSL altitude from mm to feet
      * alt is in mm, 1 mm = 0.00328084 feet
+     * Round to 1 decimal place for distinctUntilChanged optimization
      */
     const mslAltitudeMm = globalPositionInt?.alt ?? 0;
-    const mslAltitude = mslAltitudeMm * 0.00328084;
+    const mslAltitude =
+      Math.round(mslAltitudeMm * MAVLinkServiceImpl.MM_TO_FEET * 10) / 10;
 
     /*
      * Convert relative altitude from mm to feet
      * relative_alt is in mm, 1 mm = 0.00328084 feet
+     * Round to 1 decimal place for distinctUntilChanged optimization
      */
     const relativeAltitudeMm = globalPositionInt?.relativeAlt ?? 0;
-    const relativeAltitude = relativeAltitudeMm * 0.00328084;
+    const relativeAltitude =
+      Math.round(relativeAltitudeMm * MAVLinkServiceImpl.MM_TO_FEET * 10) / 10;
 
     /*
      * Convert ground speed from m/s to mph
      * groundspeed is in m/s, 1 m/s = 2.23694 mph
+     * Round to 1 decimal place for distinctUntilChanged optimization
      */
     const groundSpeedMs = vfrHud?.groundspeed ?? 0;
-    const groundSpeed = groundSpeedMs * 2.23694;
+    const groundSpeed =
+      Math.round(groundSpeedMs * MAVLinkServiceImpl.MS_TO_MPH * 10) / 10;
 
     /*
      * Convert climb rate from m/s to mph
      * climb is in m/s, 1 m/s = 2.23694 mph
+     * Round to 1 decimal place for distinctUntilChanged optimization
      */
     const climbMs = vfrHud?.climb ?? 0;
-    const climb = climbMs * 2.23694;
+    const climb = Math.round(climbMs * MAVLinkServiceImpl.MS_TO_MPH * 10) / 10;
 
     // Heading is already in degrees
-    const heading = vfrHud?.heading ?? 0;
+    // Round to 1 decimal place for distinctUntilChanged optimization
+    const heading = Math.round((vfrHud?.heading ?? 0) * 10) / 10;
 
     // Throttle is already in percent
-    const throttle = vfrHud?.throttle ?? 0;
+    // Round to 1 decimal place for distinctUntilChanged optimization
+    const throttle = Math.round((vfrHud?.throttle ?? 0) * 10) / 10;
 
     return {
-      flightTime,
       mslAltitude,
       relativeAltitude,
       groundSpeed,

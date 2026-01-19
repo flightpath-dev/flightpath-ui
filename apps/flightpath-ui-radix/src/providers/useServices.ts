@@ -120,6 +120,11 @@ export function useComponentId(): number | null {
   return useObservableState(mavlinkService.componentId$, null);
 }
 
+export function useFlightTime(): number {
+  const mavlinkService = useMAVLinkService();
+  return useObservableState(mavlinkService.flightTime$, 0);
+}
+
 // ---------- Composite service hooks ----------
 export function useFlightStatus(): FlightStatus {
   const mavlinkService = useMAVLinkService();
@@ -132,7 +137,6 @@ export function useFlightStatus(): FlightStatus {
 export function useTelemetry(): Telemetry {
   const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.telemetry$, {
-    flightTime: 0,
     mslAltitude: 0,
     relativeAltitude: 0,
     groundSpeed: 0,

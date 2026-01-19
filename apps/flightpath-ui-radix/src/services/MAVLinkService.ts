@@ -43,6 +43,7 @@ export interface MAVLinkService extends Service {
   systemId$: Observable<number | null>;
   componentId$: Observable<number | null>;
   missionProgress$: Observable<MissionProgress>;
+  flightTime$: Observable<number>;
 
   // Composite observables (derived from multiple message types)
   position2D$: Observable<Position2D>;

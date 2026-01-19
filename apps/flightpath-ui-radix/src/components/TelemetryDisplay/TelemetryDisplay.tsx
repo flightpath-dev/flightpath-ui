@@ -1,28 +1,13 @@
 import { Flex } from '@radix-ui/themes';
 
+import { useTelemetry } from '../../providers/useServices';
 import { MetricDisplay } from '../MetricDisplay/MetricDisplay';
 
-import type { Telemetry } from '../../types/Telemetry';
-
-interface TelemetryDisplayProps {
-  telemetry: Telemetry;
-}
-
-export function TelemetryDisplay({ telemetry }: TelemetryDisplayProps) {
-  const formatFlightTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
+export function TelemetryDisplay() {
+  const telemetry = useTelemetry();
 
   return (
     <Flex gap="6">
-      <MetricDisplay
-        label="Flight Time"
-        value={formatFlightTime(telemetry.flightTime)}
-      />
-
       <MetricDisplay
         label="Alt (MSL)"
         unit="ft"
