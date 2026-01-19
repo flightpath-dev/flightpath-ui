@@ -8,6 +8,7 @@ import { FlightModeEnum } from '../types/FlightMode';
 import type { MAVLinkService } from '../services/MAVLinkService';
 import type { FlightMode } from '../types/FlightMode';
 import type { FlightStatus } from '../types/FlightStatus';
+import type { MissionProgress } from '../types/MissionProgress';
 import type { Position2D } from '../types/Position2D';
 import type { Telemetry } from '../types/Telemetry';
 import type { ExtendedSysState } from '@flightpath/flightpath/gen/ts/flightpath/extended_sys_state_pb.js';
@@ -98,6 +99,15 @@ export function useVfrHud(): VfrHud | null {
 export function useMissionCurrent(): MissionCurrent | null {
   const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.missionCurrent$, null);
+}
+
+export function useMissionProgress(): MissionProgress {
+  const mavlinkService = useMAVLinkService();
+  return useObservableState(mavlinkService.missionProgress$, {
+    missionId: 0,
+    seq: 0,
+    total: 0,
+  });
 }
 
 export function useSystemId(): number | null {

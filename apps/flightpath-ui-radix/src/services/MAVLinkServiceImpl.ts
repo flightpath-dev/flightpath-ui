@@ -27,6 +27,7 @@ import { mapCustomModeToFlightMode } from '../utils/mapCustomModeToFlightMode';
 import type { MAVLinkService } from './MAVLinkService';
 import type { FlightMode } from '../types/FlightMode';
 import type { FlightStatus } from '../types/FlightStatus';
+import type { MissionProgress } from '../types/MissionProgress';
 import type { Position2D } from '../types/Position2D';
 import type { Telemetry } from '../types/Telemetry';
 import type { ExtendedSysState } from '@flightpath/flightpath/gen/ts/flightpath/extended_sys_state_pb.js';
@@ -111,6 +112,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   public remoteRssi$: Observable<number>;
   public systemId$: Observable<number | null>;
   public componentId$: Observable<number | null>;
+  public missionProgress$: Observable<MissionProgress>;
 
   // Composite observables (derived from multiple message types)
   public position2D$: Observable<Position2D>;
@@ -184,6 +186,19 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     // Transform and deduplicate component ID - only emit when value changes
     this.componentId$ = this.componentIdSubject.asObservable().pipe(
       distinctUntilChanged(), // Only emit when component ID actually changes
+    );
+
+    // Transform and deduplicate mission progress - only emit when value changes
+    this.missionProgress$ = this.missionCurrent$.pipe(
+      map((missionCurrent) => ({
+        missionId: missionCurrent?.missionId ?? 0,
+        seq: missionCurrent?.seq ?? 0,
+        total: missionCurrent?.total ?? 0,
+      })),
+      distinctUntilChanged(
+        (a, b) =>
+          a.missionId === b.missionId && a.seq === b.seq && a.total === b.total,
+      ),
     );
 
     // ========== Composite Observables ==========

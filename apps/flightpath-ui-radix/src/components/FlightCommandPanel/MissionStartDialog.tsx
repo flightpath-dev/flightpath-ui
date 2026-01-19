@@ -5,16 +5,14 @@ import { Play } from 'lucide-react';
 
 import { Surface } from '../Surface/Surface';
 
-import type { MissionCurrent } from '@flightpath/flightpath/gen/ts/flightpath/mission_current_pb.js';
-
 interface MissionStartDialogProps {
-  missionCurrent: MissionCurrent | null;
+  missionItemCount: number;
   onMissionStart: () => void;
   trigger: React.ReactElement;
 }
 
 export function MissionStartDialog({
-  missionCurrent,
+  missionItemCount,
   onMissionStart,
   trigger,
 }: MissionStartDialogProps) {
@@ -24,8 +22,6 @@ export function MissionStartDialog({
     onMissionStart();
     setOpen(false);
   };
-
-  const missionItemCount = missionCurrent?.total ?? 0;
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
