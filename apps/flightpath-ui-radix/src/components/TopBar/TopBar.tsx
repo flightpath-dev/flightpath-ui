@@ -2,13 +2,6 @@ import { Grid, Flex } from '@radix-ui/themes';
 
 import FlightPathLogo from '../../assets/flightpath-logo.png';
 import { mainNavItems } from '../../config/main-nav';
-import {
-  useFlightMode,
-  useFlightStatus,
-  useSatellites,
-  useRemoteRssi,
-  useBatteryRemaining,
-} from '../../providers/useServices';
 import { BatteryRemainingIndicator } from '../BatteryRemainingIndicator/BatteryRemainingIndicator';
 import { FlightModeIndicator } from '../FlightModeIndicator/FlightModeIndicator';
 import { FlightStatusIndicator } from '../FlightStatusIndicator/FlightStatusIndicator';
@@ -20,12 +13,6 @@ import { SatelliteCountIndicator } from '../SatelliteCountIndicator/SatelliteCou
 import styles from './TopBar.module.css';
 
 export function TopBar() {
-  const flightMode = useFlightMode();
-  const flightStatus = useFlightStatus();
-  const satellites = useSatellites();
-  const remoteRssi = useRemoteRssi();
-  const batteryRemaining = useBatteryRemaining();
-
   return (
     <Grid
       className={styles.container}
@@ -41,8 +28,8 @@ export function TopBar() {
           src={FlightPathLogo}
           width={36}
         />
-        <FlightStatusIndicator status={flightStatus} />
-        <FlightModeIndicator mode={flightMode} />
+        <FlightStatusIndicator />
+        <FlightModeIndicator />
       </Flex>
 
       {/* Center Section - Mode Navigation */}
@@ -54,9 +41,9 @@ export function TopBar() {
 
       {/* Right Section */}
       <Flex align="center" gap="5" justify="end">
-        <SatelliteCountIndicator satellites={satellites} />
-        <RssiIndicator rssi={remoteRssi} />
-        <BatteryRemainingIndicator percentage={batteryRemaining} />
+        <SatelliteCountIndicator />
+        <RssiIndicator />
+        <BatteryRemainingIndicator />
         <ModeToggle />
       </Flex>
     </Grid>

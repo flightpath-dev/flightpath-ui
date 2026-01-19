@@ -1,11 +1,8 @@
+import { useFlightMode } from '../../providers/useServices';
 import { StatusIndicator } from '../StatusIndicator/StatusIndicator';
 
 import type { AccentColor } from '../../types/AccentColor';
 import type { FlightMode } from '../../types/FlightMode';
-
-interface FlightModeIndicatorProps {
-  mode: FlightMode;
-}
 
 const MODE_COLOR_MAP: Record<FlightMode, AccentColor> = {
   unknown: 'gray',
@@ -41,7 +38,8 @@ const MODE_DISPLAY_TEXT_MAP: Record<FlightMode, string> = {
   followMe: 'Follow Me Mode',
 };
 
-export function FlightModeIndicator({ mode }: FlightModeIndicatorProps) {
+export function FlightModeIndicator() {
+  const mode = useFlightMode();
   const modeColor = MODE_COLOR_MAP[mode] ?? 'gray';
   const displayText = MODE_DISPLAY_TEXT_MAP[mode] ?? mode;
 
