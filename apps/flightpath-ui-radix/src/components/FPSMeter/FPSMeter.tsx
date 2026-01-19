@@ -26,7 +26,9 @@ export function FPSMeter() {
       frames++;
 
       if (currentTime >= lastTime + 1000) {
-        setFps(Math.round((frames * 1000) / (currentTime - lastTime)));
+        const newFps = Math.round((frames * 1000) / (currentTime - lastTime));
+        // React will not re-render if the new FPS is the same as the old FPS
+        setFps(newFps);
         frames = 0;
         lastTime = currentTime;
       }
