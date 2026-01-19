@@ -35,7 +35,7 @@ export interface MAVLinkService extends Service {
   missionCurrent$: Observable<MissionCurrent | null>;
   missionItemReached$: Observable<MissionItemReached | null>;
 
-  // Transformed observables (only emit when value changes)
+  // Derived observables (only emit when value changes)
   flightMode$: Observable<FlightMode>;
   batteryRemaining$: Observable<number>;
   satellites$: Observable<number>;
@@ -44,8 +44,6 @@ export interface MAVLinkService extends Service {
   componentId$: Observable<number | null>;
   missionProgress$: Observable<MissionProgress>;
   flightTime$: Observable<number>;
-
-  // Composite observables (derived from multiple message types)
   position2D$: Observable<Position2D>;
   telemetry$: Observable<Telemetry>;
   flightStatus$: Observable<FlightStatus>;
