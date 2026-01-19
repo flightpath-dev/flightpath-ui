@@ -32,9 +32,7 @@ interface ServiceProviderProps<TService extends Service> {
 
 /**
  * Reusable provider for a single service.
- * It will automatically handle initializing the service on mount and destroying it on unmount
- *
- * See ServicesProvider for a provider that handles multiple services.
+ * It will automatically handle initializing the service on mount and destroying it on unmount.
  */
 export function ServiceProvider<TService extends Service>({
   serviceContext,
