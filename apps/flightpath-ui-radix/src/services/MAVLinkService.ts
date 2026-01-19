@@ -1,6 +1,7 @@
 import type { Service } from './Service';
 import type { FlightMode } from '../types/FlightMode';
 import type { FlightStatus } from '../types/FlightStatus';
+import type { MissionProgress } from '../types/MissionProgress';
 import type { Position2D } from '../types/Position2D';
 import type { Telemetry } from '../types/Telemetry';
 import type { ExtendedSysState } from '@flightpath/flightpath/gen/ts/flightpath/extended_sys_state_pb.js';
@@ -41,6 +42,7 @@ export interface MAVLinkService extends Service {
   remoteRssi$: Observable<number>;
   systemId$: Observable<number | null>;
   componentId$: Observable<number | null>;
+  missionProgress$: Observable<MissionProgress>;
 
   // Composite observables (derived from multiple message types)
   position2D$: Observable<Position2D>;

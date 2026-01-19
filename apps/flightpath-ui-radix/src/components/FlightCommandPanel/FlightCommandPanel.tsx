@@ -5,7 +5,7 @@ import { MissionStartDialog } from './MissionStartDialog';
 import { TakeoffDialog } from './TakeoffDialog';
 import {
   useFlightStatus,
-  useMissionCurrent,
+  useMissionProgress,
 } from '../../providers/useServices';
 
 import styles from './FlightCommandPanel.module.css';
@@ -25,17 +25,18 @@ export default function FlightCommandPanel({
   onReturn,
   onMissionStart,
 }: FlightCommandPanelProps) {
-  const { state: flightState } = useFlightStatus();
-  const missionCurrent = useMissionCurrent();
+  const flightStatus = useFlightStatus();
+  const missionProgress = useMissionProgress();
 
-  const isMissionLoaded =
-    missionCurrent !== null && missionCurrent.missionId > 0;
+  const { state: flightState } = flightStatus;
+
+  const isMissionLoaded = missionProgress.missionId > 0;
 
   const isMissionActive =
     isMissionLoaded && (flightState === 'flying' || flightState === 'landing');
 
-  const missionProgress = isMissionLoaded
-    ? `Step ${(missionCurrent.seq ?? 0) + 1} / ${missionCurrent.total ?? 0}`
+  const missionProgressText = isMissionLoaded
+    ? `Step ${missionProgress.seq + 1} / ${missionProgress.total}`
     : undefined;
 
   return (
@@ -64,7 +65,7 @@ export default function FlightCommandPanel({
       <div className={styles.divider} />
 
       <MissionStartDialog
-        missionCurrent={missionCurrent}
+        missionItemCount={missionProgress.total}
         onMissionStart={onMissionStart}
         trigger={
           <button
@@ -96,7 +97,7 @@ export default function FlightCommandPanel({
                   className={`${styles.label} ${styles.missionLabelActive}`}
                   size="1"
                 >
-                  {missionProgress}
+                  {missionProgressText}
                 </Text>
               )}
             </Flex>
