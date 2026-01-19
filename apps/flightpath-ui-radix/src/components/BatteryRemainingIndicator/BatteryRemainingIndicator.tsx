@@ -5,11 +5,8 @@ import {
   BatteryIcon,
 } from 'lucide-react';
 
+import { useBatteryRemaining } from '../../providers/useServices';
 import { IconText } from '../IconText/IconText';
-
-interface BatteryRemainingIndicatorProps {
-  percentage: number;
-}
 
 const getBatteryIcon = (percentage: number) => {
   if (percentage === 0) return BatteryIcon;
@@ -18,9 +15,8 @@ const getBatteryIcon = (percentage: number) => {
   return BatteryFull;
 };
 
-export function BatteryRemainingIndicator({
-  percentage,
-}: BatteryRemainingIndicatorProps) {
+export function BatteryRemainingIndicator() {
+  const percentage = useBatteryRemaining();
   return (
     <IconText icon={getBatteryIcon(percentage)} mono>
       {percentage}%

@@ -1,11 +1,7 @@
 import { SignalHigh, SignalMedium, SignalLow, SignalZero } from 'lucide-react';
 
+import { useRemoteRssi } from '../../providers/useServices';
 import { IconText } from '../IconText/IconText';
-
-interface RssiIndicatorProps {
-  // RSSI values: [0-254] are valid, 255 is invalid/unknown
-  rssi: number;
-}
 
 const getSignalIcon = (percentage: number) => {
   if (percentage === 0) return SignalZero;
@@ -14,7 +10,9 @@ const getSignalIcon = (percentage: number) => {
   return SignalHigh;
 };
 
-export function RssiIndicator({ rssi }: RssiIndicatorProps) {
+export function RssiIndicator() {
+  // RSSI values: [0-254] are valid, 255 is invalid/unknown
+  const rssi = useRemoteRssi();
   const isValid = rssi !== 255;
   const percentage = isValid ? (rssi / 254) * 100 : 0;
 
