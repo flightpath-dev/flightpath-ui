@@ -1,5 +1,7 @@
 import { create } from '@bufbuild/protobuf';
 import { createClient } from '@connectrpc/connect';
+import { MavLandedState } from '@flightpath/flightpath/gen/ts/flightpath/extended_sys_state_pb.js';
+import { MavState } from '@flightpath/flightpath/gen/ts/flightpath/heartbeat_pb.js';
 import {
   MavCmd,
   MavFrame,
@@ -10,13 +12,23 @@ import {
   SendCommandIntRequestSchema,
   SendCommandLongRequestSchema,
 } from '@flightpath/flightpath/gen/ts/flightpath/mavlink_service_pb.js';
-import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  interval,
+  map,
+  startWith,
+} from 'rxjs';
 
 import { connectTransport } from '../utils/connectTransport';
 import { mapCustomModeToFlightMode } from '../utils/mapCustomModeToFlightMode';
 
 import type { MAVLinkService } from './MAVLinkService';
 import type { FlightMode } from '../types/FlightMode';
+import type { FlightStatus } from '../types/FlightStatus';
+import type { Position2D } from '../types/Position2D';
+import type { Telemetry } from '../types/Telemetry';
 import type { ExtendedSysState } from '@flightpath/flightpath/gen/ts/flightpath/extended_sys_state_pb.js';
 import type { GlobalPositionInt } from '@flightpath/flightpath/gen/ts/flightpath/global_position_int_pb.js';
 import type { GpsRawInt } from '@flightpath/flightpath/gen/ts/flightpath/gps_raw_int_pb.js';
@@ -100,6 +112,15 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   public systemId$: Observable<number | null>;
   public componentId$: Observable<number | null>;
 
+  // Composite observables (derived from multiple message types)
+  public position2D$: Observable<Position2D>;
+  public telemetry$: Observable<Telemetry>;
+  public flightStatus$: Observable<FlightStatus>;
+
+  // Flight time tracking state (for telemetry$)
+  private armedStartTime: number | null = null;
+  private lastFlightTime: number = 0;
+
   // Stream cancellation flag
   private streamCancelled = false;
 
@@ -164,6 +185,65 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     this.componentId$ = this.componentIdSubject.asObservable().pipe(
       distinctUntilChanged(), // Only emit when component ID actually changes
     );
+
+    // ========== Composite Observables ==========
+
+    // Position2D observable - derived from GlobalPositionInt
+    this.position2D$ = this.globalPositionInt$.pipe(
+      map((globalPositionInt) => this.derivePosition2D(globalPositionInt)),
+      distinctUntilChanged(
+        (prev, curr) =>
+          // Only emit when position or heading actually changes
+          prev.lat === curr.lat &&
+          prev.lon === curr.lon &&
+          prev.heading === curr.heading,
+      ),
+    );
+
+    // Telemetry observable - combines Heartbeat, GlobalPositionInt, and VfrHud
+    const telemetryData$ = combineLatest([
+      this.heartbeat$,
+      this.globalPositionInt$,
+      this.vfrHud$,
+    ]);
+
+    // Create an interval that emits every second for flight time updates
+    const timer$ = interval(1000).pipe(startWith(0));
+
+    // Combine data with timer to update telemetry every second
+    this.telemetry$ = combineLatest([telemetryData$, timer$]).pipe(
+      map(([[heartbeat, globalPositionInt, vfrHud]]) => {
+        const isArmed = heartbeat?.baseMode?.safetyArmed ?? false;
+
+        // Track when armed state becomes true
+        if (isArmed && this.armedStartTime === null) {
+          // Starting a new flight - reset timer
+          this.armedStartTime = Date.now();
+          this.lastFlightTime = 0;
+        } else if (!isArmed && this.armedStartTime !== null) {
+          // Disarming - save the current flight time
+          const currentFlightTime = (Date.now() - this.armedStartTime) / 1000;
+          this.lastFlightTime = currentFlightTime;
+          this.armedStartTime = null;
+        }
+
+        return this.deriveTelemetry(heartbeat, globalPositionInt, vfrHud);
+      }),
+    );
+
+    // FlightStatus observable - combines Heartbeat, SysStatus, and ExtendedSysState
+    this.flightStatus$ = combineLatest([
+      this.heartbeat$,
+      this.sysStatus$,
+      this.extendedSysState$,
+    ]).pipe(
+      map(([heartbeat, sysStatus, extendedSysState]) =>
+        this.deriveFlightStatus(heartbeat, sysStatus, extendedSysState),
+      ),
+      distinctUntilChanged(
+        (a, b) => a.state === b.state && a.severity === b.severity,
+      ),
+    );
   }
 
   /**
@@ -182,6 +262,8 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   public onDestroy(): void {
     console.log('[MAVLinkService] Destroying...');
     this.stopAllStreams();
+    // Reset flight time tracking state
+    this.armedStartTime = null;
   }
 
   /**
@@ -371,6 +453,223 @@ export class MAVLinkServiceImpl implements MAVLinkService {
       clearTimeout(this.timeoutTimer);
       this.timeoutTimer = null;
     }
+  }
+
+  // ========== Derivation Helpers ==========
+
+  /**
+   * Derive Position2D object from GlobalPositionInt
+   * @private
+   */
+  private derivePosition2D(
+    globalPositionInt: GlobalPositionInt | null,
+  ): Position2D {
+    /*
+     * Convert latitude from degrees * 1E7 to degrees
+     * lat is in degrees * 1E7, divide by 1E7 to get degrees
+     */
+    const latDegrees =
+      globalPositionInt?.lat !== null && globalPositionInt?.lat !== undefined
+        ? globalPositionInt.lat / 10_000_000
+        : 0;
+
+    /*
+     * Convert longitude from degrees * 1E7 to degrees
+     * lon is in degrees * 1E7, divide by 1E7 to get degrees
+     */
+    const lonDegrees =
+      globalPositionInt?.lon !== null && globalPositionInt?.lon !== undefined
+        ? globalPositionInt.lon / 10_000_000
+        : 0;
+
+    /*
+     * Convert heading from hundredths of degrees to degrees
+     * hdg is in degrees * 100, divide by 100 to get degrees
+     */
+    const headingDegrees =
+      globalPositionInt?.hdg !== null && globalPositionInt?.hdg !== undefined
+        ? globalPositionInt.hdg / 100
+        : 0;
+
+    return {
+      lat: latDegrees,
+      lon: lonDegrees,
+      heading: headingDegrees,
+    };
+  }
+
+  /**
+   * Derive Telemetry object from Heartbeat, GlobalPositionInt, and VfrHud
+   * @private
+   */
+  private deriveTelemetry(
+    heartbeat: Heartbeat | null,
+    globalPositionInt: GlobalPositionInt | null,
+    vfrHud: VfrHud | null,
+  ): Telemetry {
+    // Calculate flight time (will be updated by interval)
+    const isArmed = heartbeat?.baseMode?.safetyArmed ?? false;
+    const flightTime =
+      isArmed && this.armedStartTime !== null
+        ? (Date.now() - this.armedStartTime) / 1000
+        : this.lastFlightTime;
+
+    /*
+     * Convert MSL altitude from mm to feet
+     * alt is in mm, 1 mm = 0.00328084 feet
+     */
+    const mslAltitudeMm = globalPositionInt?.alt ?? 0;
+    const mslAltitude = mslAltitudeMm * 0.00328084;
+
+    /*
+     * Convert relative altitude from mm to feet
+     * relative_alt is in mm, 1 mm = 0.00328084 feet
+     */
+    const relativeAltitudeMm = globalPositionInt?.relativeAlt ?? 0;
+    const relativeAltitude = relativeAltitudeMm * 0.00328084;
+
+    /*
+     * Convert ground speed from m/s to mph
+     * groundspeed is in m/s, 1 m/s = 2.23694 mph
+     */
+    const groundSpeedMs = vfrHud?.groundspeed ?? 0;
+    const groundSpeed = groundSpeedMs * 2.23694;
+
+    /*
+     * Convert climb rate from m/s to mph
+     * climb is in m/s, 1 m/s = 2.23694 mph
+     */
+    const climbMs = vfrHud?.climb ?? 0;
+    const climb = climbMs * 2.23694;
+
+    // Heading is already in degrees
+    const heading = vfrHud?.heading ?? 0;
+
+    // Throttle is already in percent
+    const throttle = vfrHud?.throttle ?? 0;
+
+    return {
+      flightTime,
+      mslAltitude,
+      relativeAltitude,
+      groundSpeed,
+      climb,
+      heading,
+      throttle,
+    };
+  }
+
+  /**
+   * Derive FlightStatus from Heartbeat, SysStatus, and ExtendedSysState
+   * @private
+   */
+  private deriveFlightStatus(
+    heartbeat: Heartbeat | null,
+    sysStatus: SysStatus | null,
+    extendedSysState: ExtendedSysState | null,
+  ): FlightStatus {
+    // Communication lost
+    if (!heartbeat) {
+      return { state: 'communicationLost', severity: 'error' };
+    }
+
+    const { systemStatus } = heartbeat;
+    const isArmed = heartbeat.baseMode?.safetyArmed ?? false;
+    const landedState =
+      extendedSysState?.landedState ?? MavLandedState.UNSPECIFIED;
+    const hasHealthIssues = sysStatus
+      ? this.checkSensorHealth(sysStatus)
+      : false;
+
+    // Not ready states
+    if (
+      systemStatus === MavState.UNSPECIFIED ||
+      systemStatus === MavState.BOOT ||
+      systemStatus === MavState.CALIBRATING ||
+      hasHealthIssues
+    ) {
+      return { state: 'notReady', severity: 'error' };
+    }
+
+    // Emergency
+    if (systemStatus === MavState.EMERGENCY) {
+      return { state: 'notReady', severity: 'error' };
+    }
+
+    // Critical (warnings present)
+    if (systemStatus === MavState.CRITICAL) {
+      const state = isArmed
+        ? landedState === MavLandedState.IN_AIR
+          ? 'flying'
+          : 'armed'
+        : 'readyToFly';
+      return { state, severity: 'warning' };
+    }
+
+    // Standby (ready but disarmed)
+    if (systemStatus === MavState.STANDBY) {
+      return { state: 'readyToFly', severity: 'info' };
+    }
+
+    // Active (armed/flying)
+    if (systemStatus === MavState.ACTIVE && isArmed) {
+      switch (landedState) {
+        case MavLandedState.ON_GROUND:
+          return { state: 'armed', severity: 'info' };
+        case MavLandedState.IN_AIR:
+        case MavLandedState.TAKEOFF:
+          return { state: 'flying', severity: 'info' };
+        case MavLandedState.LANDING:
+          return { state: 'landing', severity: 'info' };
+        default:
+          return { state: 'armed', severity: 'info' };
+      }
+    }
+
+    // Default fallback
+    return { state: 'readyToFly', severity: 'info' };
+  }
+
+  /**
+   * Check if sensors have health issues
+   * @private
+   */
+  private checkSensorHealth(sysStatus: SysStatus): boolean {
+    const health = sysStatus.onboardControlSensorsHealth;
+    const enabled = sysStatus.onboardControlSensorsEnabled;
+
+    if (!health || !enabled) {
+      return false;
+    }
+
+    /* --- Check critical sensors: if enabled but not healthy, return true --- */
+
+    // 3D gyro (bit 0)
+    if (enabled.sensor3dGyro && !health.sensor3dGyro) {
+      return true;
+    }
+    // 3D accel (bit 1)
+    if (enabled.sensor3dAccel && !health.sensor3dAccel) {
+      return true;
+    }
+    // 3D mag (bit 2)
+    if (enabled.sensor3dMag && !health.sensor3dMag) {
+      return true;
+    }
+    // absolute pressure (bit 3)
+    if (enabled.sensorAbsolutePressure && !health.sensorAbsolutePressure) {
+      return true;
+    }
+    // GPS (bit 5)
+    if (enabled.sensorGps && !health.sensorGps) {
+      return true;
+    }
+    // battery/angular rate control (bit 10)
+    if (enabled.sensorAngularRateControl && !health.sensorAngularRateControl) {
+      return true;
+    }
+
+    return false;
   }
 
   // ========== Command Methods ==========

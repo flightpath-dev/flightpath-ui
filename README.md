@@ -14,7 +14,7 @@ protocol and React components. This approach provides several key benefits:
 1. **Declarative Logic & Cleaner Code**: Instead of imperative `useEffect`
    chains, RxJS defines data transformations declaratively. This centralizes
    business logic outside of components, making the code more readable and
-   easier to maintain. See `FlightStatusService` as an example.
+   easier to maintain. See `MAVLinkService` for examples.
 
 2. **Efficient State Propagation**: Updates are only propagated to the specific
    components that subscribe to a stream. This avoids the "unnecessary

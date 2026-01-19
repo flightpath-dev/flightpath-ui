@@ -5,7 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 
-import { ServicesProvider } from './providers/ServicesProvider';
+import { MAVLinkServiceProvider } from './providers/MAVLinkServiceProvider';
 import { routes } from './routes';
 // CSS imports - order matters for cascading styles
 // eslint-disable-next-line import-x/order
@@ -24,9 +24,9 @@ root.render(
   <StrictMode>
     <ThemeProvider attribute="class">
       <Theme accentColor="indigo" grayColor="slate">
-        <ServicesProvider>
+        <MAVLinkServiceProvider>
           <RouterProvider router={router} />
-        </ServicesProvider>
+        </MAVLinkServiceProvider>
       </Theme>
     </ThemeProvider>
   </StrictMode>,

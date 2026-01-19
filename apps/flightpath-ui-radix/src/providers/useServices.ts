@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import { useObservableState } from 'observable-hooks';
 
-import { ServicesContext, type ServicesContextValue } from './ServicesContext';
+import { MAVLinkServiceContext } from './MAVLinkServiceContext';
 import { FlightModeEnum } from '../types/FlightMode';
 
 import type { MAVLinkService } from '../services/MAVLinkService';
@@ -21,112 +21,107 @@ import type { SysStatus } from '@flightpath/flightpath/gen/ts/flightpath/sys_sta
 import type { VfrHud } from '@flightpath/flightpath/gen/ts/flightpath/vfr_hud_pb.js';
 
 /**
- * Hook to access all services.
- * Use this if you need direct access to a service instance.
+ * Hook to access MAVLinkService.
+ * Use this if you need direct access to the service instance.
  */
-export function useServices(): ServicesContextValue {
-  const services = useContext(ServicesContext);
+export function useMAVLinkService(): MAVLinkService {
+  const mavlinkService = useContext(MAVLinkServiceContext);
 
-  if (!services) {
-    throw new Error('Services are not provided');
+  if (!mavlinkService) {
+    throw new Error('MAVLinkService is not provided');
   }
 
-  return services;
+  return mavlinkService;
 }
 
 // ---------- MAVLink service hooks ----------
 export function useHeartbeat(): Heartbeat | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.heartbeat$, null);
 }
 
 export function useFlightMode(): FlightMode {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.flightMode$, FlightModeEnum.Unknown);
 }
 
 export function useSysStatus(): SysStatus | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.sysStatus$, null);
 }
 
 export function useBatteryRemaining(): number {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.batteryRemaining$, 0);
 }
 
 export function useExtendedSysState(): ExtendedSysState | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.extendedSysState$, null);
 }
 
 export function useStatusText(): StatusText | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.statusText$, null);
 }
 
 export function useGlobalPositionInt(): GlobalPositionInt | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.globalPositionInt$, null);
 }
 
 export function useGpsRawInt(): GpsRawInt | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.gpsRawInt$, null);
 }
 
 export function useSatellites(): number {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.satellites$, 0);
 }
 
 export function useRadioStatus(): RadioStatus | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.radioStatus$, null);
 }
 
 export function useRemoteRssi(): number {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.remoteRssi$, 0);
 }
 
 export function useVfrHud(): VfrHud | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.vfrHud$, null);
 }
 
 export function useMissionCurrent(): MissionCurrent | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.missionCurrent$, null);
 }
 
 export function useSystemId(): number | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.systemId$, null);
 }
 
 export function useComponentId(): number | null {
-  const { mavlinkService } = useServices();
+  const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.componentId$, null);
-}
-
-export function useMAVLinkService(): MAVLinkService {
-  const { mavlinkService } = useServices();
-  return mavlinkService;
 }
 
 // ---------- Composite service hooks ----------
 export function useFlightStatus(): FlightStatus {
-  const { flightStatusService } = useServices();
-  return useObservableState(flightStatusService.flightStatus$, {
+  const mavlinkService = useMAVLinkService();
+  return useObservableState(mavlinkService.flightStatus$, {
     state: 'notReady',
     severity: 'error',
   });
 }
 
 export function useTelemetry(): Telemetry {
-  const { telemetryService } = useServices();
-  return useObservableState(telemetryService.telemetry$, {
+  const mavlinkService = useMAVLinkService();
+  return useObservableState(mavlinkService.telemetry$, {
     flightTime: 0,
     mslAltitude: 0,
     relativeAltitude: 0,
@@ -138,8 +133,8 @@ export function useTelemetry(): Telemetry {
 }
 
 export function usePosition2D(): Position2D {
-  const { position2DService } = useServices();
-  return useObservableState(position2DService.position2D$, {
+  const mavlinkService = useMAVLinkService();
+  return useObservableState(mavlinkService.position2D$, {
     lat: 0,
     lon: 0,
     heading: 0,
