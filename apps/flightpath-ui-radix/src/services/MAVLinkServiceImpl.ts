@@ -109,7 +109,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   public missionCurrent$: Observable<MissionCurrent | null>;
   public missionItemReached$: Observable<MissionItemReached | null>;
 
-  // Transformed observables - only emit when value changes
+  // Derived observables - only emit when value changes
   public flightMode$: Observable<FlightMode>;
   public batteryRemaining$: Observable<number>;
   public satellites$: Observable<number>;
@@ -118,8 +118,6 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   public componentId$: Observable<number | null>;
   public missionProgress$: Observable<MissionProgress>;
   public flightTime$: Observable<number>;
-
-  // Composite observables (derived from multiple message types)
   public position2D$: Observable<Position2D>;
   public telemetry$: Observable<Telemetry>;
   public flightStatus$: Observable<FlightStatus>;
@@ -236,7 +234,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
       distinctUntilChanged(), // Only emit when flight time actually changes
     );
 
-    // ========== Composite Observables ==========
+    // ========== Derived Observables (continued) ==========
 
     // Position2D observable - derived from GlobalPositionInt
     this.position2D$ = this.globalPositionInt$.pipe(
@@ -506,34 +504,40 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     /*
      * Convert latitude from degrees * 1E7 to degrees
      * lat is in degrees * 1E7, divide by 1E7 to get degrees
+     * Round to 6 decimal places (~11 cm precision) for distinctUntilChanged optimization
      */
     const latDegrees =
       globalPositionInt?.lat !== null && globalPositionInt?.lat !== undefined
         ? globalPositionInt.lat / 10_000_000
         : 0;
+    const lat = Math.round(latDegrees * 1_000_000) / 1_000_000;
 
     /*
      * Convert longitude from degrees * 1E7 to degrees
      * lon is in degrees * 1E7, divide by 1E7 to get degrees
+     * Round to 6 decimal places (~11 cm precision) for distinctUntilChanged optimization
      */
     const lonDegrees =
       globalPositionInt?.lon !== null && globalPositionInt?.lon !== undefined
         ? globalPositionInt.lon / 10_000_000
         : 0;
+    const lon = Math.round(lonDegrees * 1_000_000) / 1_000_000;
 
     /*
      * Convert heading from hundredths of degrees to degrees
      * hdg is in degrees * 100, divide by 100 to get degrees
+     * Round to 1 decimal place (0.1 degrees) for distinctUntilChanged optimization
      */
     const headingDegrees =
       globalPositionInt?.hdg !== null && globalPositionInt?.hdg !== undefined
         ? globalPositionInt.hdg / 100
         : 0;
+    const heading = Math.round(headingDegrees * 10) / 10;
 
     return {
-      lat: latDegrees,
-      lon: lonDegrees,
-      heading: headingDegrees,
+      lat,
+      lon,
+      heading,
     };
   }
 

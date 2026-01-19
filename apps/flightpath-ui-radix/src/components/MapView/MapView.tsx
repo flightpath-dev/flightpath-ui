@@ -48,10 +48,33 @@ const DRONE_ICON_DATA_URL = `data:image/svg+xml;charset=utf-8,${encodeURICompone
   DRONE_ICON_SVG,
 )}`;
 
+/*
+ * OpenLayers Feature Hierarchy for the Drone Marker:
+ *
+ *   Feature (droneMarker)
+ *   ├── Geometry (Point)     → WHERE the drone is on the map (lat/lon)
+ *   └── Style
+ *       └── Image (Icon)     → HOW the drone looks (SVG icon with rotation)
+ *
+ * Optimization Strategy:
+ *
+ * We cache both the Feature (droneMarkerRef) and the Icon (droneIconRef) to
+ * enable efficient updates without recreating objects on every position change.
+ *
+ * - Position updates: Call setGeometry() on the cached Feature
+ * - Rotation updates: Call setRotation() on the cached Icon
+ *
+ * Without caching the Icon, we would have to either:
+ * 1. Recreate Style/Icon on every update (expensive - triggers full layer redraw)
+ * 2. Traverse the object hierarchy: feature.getStyle().getImage().setRotation()
+ *
+ * The cached reference gives us direct, efficient access to update rotation.
+ */
 export function MapView() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
-  const droneMarkerRef = useRef<Feature | null>(null);
+  const droneMarkerRef = useRef<Feature | null>(null); // Cached for position updates
+  const droneIconRef = useRef<Icon | null>(null); // Cached for rotation updates
   const position = usePosition2D();
 
   // Initialize map
@@ -75,18 +98,24 @@ export function MapView() {
       source: droneMarkerSource,
     });
 
+    // --- Drone Marker Feature ---
+    // Create the Feature with initial geometry (position on map)
     const droneMarker = new Feature({
       geometry: new Point(droneLocation),
     });
-    droneMarker.setStyle(
-      new Style({
-        image: new Icon({
-          src: DRONE_ICON_DATA_URL,
-          rotation: BOS_RUNWAY_HEADING,
-          anchor: [0.5, 0.5],
-        }),
-      }),
-    );
+
+    // Create the Icon (visual representation with rotation)
+    // We cache this separately to enable efficient rotation updates via setRotation()
+    // instead of recreating the entire Style/Icon on every heading change
+    const droneIcon = new Icon({
+      src: DRONE_ICON_DATA_URL,
+      rotation: BOS_RUNWAY_HEADING,
+      anchor: [0.5, 0.5],
+    });
+    droneIconRef.current = droneIcon;
+
+    // Connect the hierarchy: Feature → Style → Icon
+    droneMarker.setStyle(new Style({ image: droneIcon }));
     droneMarkerSource.addFeature(droneMarker);
     droneMarkerRef.current = droneMarker;
 
@@ -115,6 +144,7 @@ export function MapView() {
       // Set the refs to null to prevent their use in other useEffects
       mapInstanceRef.current = null;
       droneMarkerRef.current = null;
+      droneIconRef.current = null;
     };
   }, []);
 
@@ -129,7 +159,12 @@ export function MapView() {
    * |      360      | North     |
    */
   useEffect(() => {
-    if (!mapInstanceRef.current || !droneMarkerRef.current) return;
+    if (
+      !mapInstanceRef.current ||
+      !droneMarkerRef.current ||
+      !droneIconRef.current
+    )
+      return;
 
     const map = mapInstanceRef.current;
     const view = map.getView();
@@ -139,17 +174,12 @@ export function MapView() {
     // Update marker position
     droneMarkerRef.current.setGeometry(new Point(droneLocation));
 
-    // Update marker rotation
-    droneMarkerRef.current.setStyle(
-      new Style({
-        image: new Icon({
-          src: DRONE_ICON_DATA_URL,
-          // Convert degrees to radians (note that 0° = north, 90° = east)
-          rotation: (position.heading * Math.PI) / 180,
-          anchor: [0.5, 0.5],
-        }),
-      }),
-    );
+    // Update icon rotation efficiently (reuse cached icon, don't recreate Style)
+    const rotation = (position.heading * Math.PI) / 180;
+    droneIconRef.current.setRotation(rotation);
+
+    // Notify OpenLayers that the feature has changed
+    droneMarkerRef.current.changed();
 
     // Check if drone is visible in the map viewport
     const mapExtent = view.calculateExtent();
