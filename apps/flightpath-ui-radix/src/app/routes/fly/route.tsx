@@ -1,8 +1,6 @@
-import { useCallback } from 'react';
-
 import { Flex } from '@radix-ui/themes';
 
-import FlightCommandPanel from '../../../components/FlightCommandPanel/FlightCommandPanel';
+import { FlightCommandPanel } from '../../../components/FlightCommandPanel/FlightCommandPanel';
 import { MapView } from '../../../components/MapView/MapView';
 import {
   useSystemId,
@@ -14,35 +12,33 @@ import { FEET_TO_METERS } from '../../../utils/unitConversions';
 import styles from './route.module.css';
 
 export function FlyView() {
+  console.log('FlyView rendered');
   const systemId = useSystemId();
   const componentId = useComponentId();
   const mavlinkService = useMAVLinkService();
 
-  const handleTakeoff = useCallback(
-    async (altitudeFt: number) => {
-      if (systemId === null || componentId === null) {
-        return;
-      }
+  const handleTakeoff = async (altitudeFt: number) => {
+    if (systemId === null || componentId === null) {
+      return;
+    }
 
-      try {
-        // Arm the drone
-        await mavlinkService.sendArmCommand(systemId, componentId);
+    try {
+      // Arm the drone
+      await mavlinkService.sendArmCommand(systemId, componentId);
 
-        // Convert feet to meters and send takeoff command
-        const altitudeMeters = altitudeFt * FEET_TO_METERS;
-        await mavlinkService.sendTakeoffCommand(
-          systemId,
-          componentId,
-          altitudeMeters,
-        );
-      } catch (error) {
-        console.error('Error sending takeoff command:', error);
-      }
-    },
-    [systemId, componentId, mavlinkService],
-  );
+      // Convert feet to meters and send takeoff command
+      const altitudeMeters = altitudeFt * FEET_TO_METERS;
+      await mavlinkService.sendTakeoffCommand(
+        systemId,
+        componentId,
+        altitudeMeters,
+      );
+    } catch (error) {
+      console.error('Error sending takeoff command:', error);
+    }
+  };
 
-  const handleLand = useCallback(async () => {
+  const handleLand = async () => {
     if (systemId === null || componentId === null) {
       return;
     }
@@ -53,9 +49,9 @@ export function FlyView() {
     } catch (error) {
       console.error('Error sending return to launch command:', error);
     }
-  }, [systemId, componentId, mavlinkService]);
+  };
 
-  const handleMissionStart = useCallback(async () => {
+  const handleMissionStart = async () => {
     if (systemId === null || componentId === null) {
       return;
     }
@@ -66,7 +62,7 @@ export function FlyView() {
     } catch (error) {
       console.error('Error sending mission start command:', error);
     }
-  }, [systemId, componentId, mavlinkService]);
+  };
 
   return (
     <Flex flexGrow="1" position="relative">

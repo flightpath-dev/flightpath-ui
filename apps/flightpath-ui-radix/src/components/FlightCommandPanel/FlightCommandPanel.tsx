@@ -18,7 +18,7 @@ interface FlightCommandPanelProps {
   onReturn: () => void;
 }
 
-export default function FlightCommandPanel({
+export function FlightCommandPanel({
   className,
   disabled = false,
   onTakeoff,
