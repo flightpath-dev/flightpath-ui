@@ -12,6 +12,7 @@ import {
   SendCommandIntRequestSchema,
   SendCommandLongRequestSchema,
 } from '@flightpath/flightpath/gen/ts/flightpath/mavlink_service_pb.js';
+import { MavSeverity } from '@flightpath/flightpath/gen/ts/flightpath/statustext_pb.js';
 import {
   BehaviorSubject,
   combineLatest,
@@ -29,6 +30,8 @@ import type { FlightMode } from '../types/FlightMode';
 import type { FlightStatus } from '../types/FlightStatus';
 import type { MissionProgress } from '../types/MissionProgress';
 import type { Position2D } from '../types/Position2D';
+import type { Severity } from '../types/Severity';
+import type { StatusMessage } from '../types/StatusMessage';
 import type { Telemetry } from '../types/Telemetry';
 import type { ExtendedSysState } from '@flightpath/flightpath/gen/ts/flightpath/extended_sys_state_pb.js';
 import type { GlobalPositionInt } from '@flightpath/flightpath/gen/ts/flightpath/global_position_int_pb.js';
@@ -97,17 +100,17 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     null,
   );
 
-  // Public observables - emit message updates
-  public heartbeat$: Observable<Heartbeat | null>;
-  public sysStatus$: Observable<SysStatus | null>;
-  public extendedSysState$: Observable<ExtendedSysState | null>;
-  public statusText$: Observable<StatusText | null>;
-  public globalPositionInt$: Observable<GlobalPositionInt | null>;
-  public gpsRawInt$: Observable<GpsRawInt | null>;
-  public radioStatus$: Observable<RadioStatus | null>;
-  public vfrHud$: Observable<VfrHud | null>;
-  public missionCurrent$: Observable<MissionCurrent | null>;
-  public missionItemReached$: Observable<MissionItemReached | null>;
+  // Private observables - raw message streams (used internally for derivation)
+  private heartbeat$: Observable<Heartbeat | null>;
+  private sysStatus$: Observable<SysStatus | null>;
+  private extendedSysState$: Observable<ExtendedSysState | null>;
+  private statusText$: Observable<StatusText | null>;
+  private globalPositionInt$: Observable<GlobalPositionInt | null>;
+  private gpsRawInt$: Observable<GpsRawInt | null>;
+  private radioStatus$: Observable<RadioStatus | null>;
+  private vfrHud$: Observable<VfrHud | null>;
+  private missionCurrent$: Observable<MissionCurrent | null>;
+  private missionItemReached$: Observable<MissionItemReached | null>;
 
   // Derived observables - only emit when value changes
   public flightMode$: Observable<FlightMode>;
@@ -121,6 +124,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   public position2D$: Observable<Position2D>;
   public telemetry$: Observable<Telemetry>;
   public flightStatus$: Observable<FlightStatus>;
+  public statusMessage$: Observable<StatusMessage | null>;
 
   // Flight time tracking state (for telemetry$)
   private armedStartTime: number | null = null;
@@ -279,6 +283,14 @@ export class MAVLinkServiceImpl implements MAVLinkService {
       ),
       distinctUntilChanged(
         (a, b) => a.state === b.state && a.severity === b.severity,
+      ),
+    );
+
+    // StatusMessage observable - transforms StatusText to StatusMessage
+    // No distinctUntilChanged - status messages are event-driven and should all be displayed
+    this.statusMessage$ = this.statusText$.pipe(
+      map((statusText) =>
+        statusText ? this.deriveStatusMessage(statusText) : null,
       ),
     );
   }
@@ -671,6 +683,40 @@ export class MAVLinkServiceImpl implements MAVLinkService {
 
     // Default fallback
     return { state: 'readyToFly', severity: 'info' };
+  }
+
+  /**
+   * Derive StatusMessage from StatusText
+   * Maps MAVLink severity to application Severity type
+   * @private
+   */
+  private deriveStatusMessage(statusText: StatusText): StatusMessage {
+    return {
+      severity: this.mavSeverityToSeverity(statusText.severity),
+      text: statusText.text ?? '',
+      timestamp: new Date(),
+    };
+  }
+
+  /**
+   * Map MAVLink severity enum to application Severity type
+   * @private
+   */
+  private mavSeverityToSeverity(mavSeverity: MavSeverity): Severity {
+    switch (mavSeverity) {
+      case MavSeverity.EMERGENCY:
+      case MavSeverity.ALERT:
+      case MavSeverity.CRITICAL:
+      case MavSeverity.ERROR:
+        return 'error';
+      case MavSeverity.WARNING:
+        return 'warning';
+      case MavSeverity.NOTICE:
+      case MavSeverity.INFO:
+      case MavSeverity.DEBUG:
+      default:
+        return 'info';
+    }
   }
 
   /**

@@ -10,16 +10,8 @@ import type { FlightMode } from '../types/FlightMode';
 import type { FlightStatus } from '../types/FlightStatus';
 import type { MissionProgress } from '../types/MissionProgress';
 import type { Position2D } from '../types/Position2D';
+import type { StatusMessage } from '../types/StatusMessage';
 import type { Telemetry } from '../types/Telemetry';
-import type { ExtendedSysState } from '@flightpath/flightpath/gen/ts/flightpath/extended_sys_state_pb.js';
-import type { GlobalPositionInt } from '@flightpath/flightpath/gen/ts/flightpath/global_position_int_pb.js';
-import type { GpsRawInt } from '@flightpath/flightpath/gen/ts/flightpath/gps_raw_int_pb.js';
-import type { Heartbeat } from '@flightpath/flightpath/gen/ts/flightpath/heartbeat_pb.js';
-import type { MissionCurrent } from '@flightpath/flightpath/gen/ts/flightpath/mission_current_pb.js';
-import type { RadioStatus } from '@flightpath/flightpath/gen/ts/flightpath/radio_status_pb.js';
-import type { StatusText } from '@flightpath/flightpath/gen/ts/flightpath/statustext_pb.js';
-import type { SysStatus } from '@flightpath/flightpath/gen/ts/flightpath/sys_status_pb.js';
-import type { VfrHud } from '@flightpath/flightpath/gen/ts/flightpath/vfr_hud_pb.js';
 
 /**
  * Hook to access MAVLinkService.
@@ -36,19 +28,9 @@ export function useMAVLinkService(): MAVLinkService {
 }
 
 // ---------- MAVLink service hooks ----------
-export function useHeartbeat(): Heartbeat | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.heartbeat$, null);
-}
-
 export function useFlightMode(): FlightMode {
   const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.flightMode$, FlightModeEnum.Unknown);
-}
-
-export function useSysStatus(): SysStatus | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.sysStatus$, null);
 }
 
 export function useBatteryRemaining(): number {
@@ -56,49 +38,14 @@ export function useBatteryRemaining(): number {
   return useObservableState(mavlinkService.batteryRemaining$, 0);
 }
 
-export function useExtendedSysState(): ExtendedSysState | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.extendedSysState$, null);
-}
-
-export function useStatusText(): StatusText | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.statusText$, null);
-}
-
-export function useGlobalPositionInt(): GlobalPositionInt | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.globalPositionInt$, null);
-}
-
-export function useGpsRawInt(): GpsRawInt | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.gpsRawInt$, null);
-}
-
 export function useSatellites(): number {
   const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.satellites$, 0);
 }
 
-export function useRadioStatus(): RadioStatus | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.radioStatus$, null);
-}
-
 export function useRemoteRssi(): number {
   const mavlinkService = useMAVLinkService();
   return useObservableState(mavlinkService.remoteRssi$, 0);
-}
-
-export function useVfrHud(): VfrHud | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.vfrHud$, null);
-}
-
-export function useMissionCurrent(): MissionCurrent | null {
-  const mavlinkService = useMAVLinkService();
-  return useObservableState(mavlinkService.missionCurrent$, null);
 }
 
 export function useMissionProgress(): MissionProgress {
@@ -153,4 +100,9 @@ export function usePosition2D(): Position2D {
     lon: 0,
     heading: 0,
   });
+}
+
+export function useStatusMessage(): StatusMessage | null {
+  const mavlinkService = useMAVLinkService();
+  return useObservableState(mavlinkService.statusMessage$, null);
 }
