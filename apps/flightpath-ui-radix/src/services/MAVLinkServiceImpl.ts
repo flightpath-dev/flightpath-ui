@@ -24,6 +24,7 @@ import {
 
 import { connectTransport } from '../utils/connectTransport';
 import { mapCustomModeToFlightMode } from '../utils/mapCustomModeToFlightMode';
+import { MM_TO_FEET, MS_TO_MPH } from '../utils/unitConversions';
 
 import type { MAVLinkService } from './MAVLinkService';
 import type { FlightMode } from '../types/FlightMode';
@@ -66,10 +67,6 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     connectTransport,
   );
 
-  // Unit conversion constants
-  private static readonly MM_TO_FEET = 0.00328084;
-  private static readonly MS_TO_MPH = 2.23694;
-
   // Internal state management - 8 BehaviorSubjects for each message type
   private readonly heartbeatSubject = new BehaviorSubject<Heartbeat | null>(
     null,
@@ -110,7 +107,10 @@ export class MAVLinkServiceImpl implements MAVLinkService {
   private radioStatus$: Observable<RadioStatus | null>;
   private vfrHud$: Observable<VfrHud | null>;
   private missionCurrent$: Observable<MissionCurrent | null>;
-  private missionItemReached$: Observable<MissionItemReached | null>;
+  // Commented out: Not currently used by any components or derived observables.
+  // Messages are still received from gRPC and stored in missionItemReachedSubject
+  // for potential future use. Uncomment when a derived observable or component needs it.
+  // private missionItemReached$: Observable<MissionItemReached | null>;
 
   // Derived observables - only emit when value changes
   public flightMode$: Observable<FlightMode>;
@@ -155,7 +155,8 @@ export class MAVLinkServiceImpl implements MAVLinkService {
     this.radioStatus$ = this.radioStatusSubject.asObservable();
     this.vfrHud$ = this.vfrHudSubject.asObservable();
     this.missionCurrent$ = this.missionCurrentSubject.asObservable();
-    this.missionItemReached$ = this.missionItemReachedSubject.asObservable();
+    // Commented out: See comment on property declaration above
+    // this.missionItemReached$ = this.missionItemReachedSubject.asObservable();
 
     // Transform and deduplicate FlightMode - only emit when value changes
     this.flightMode$ = this.heartbeat$.pipe(
@@ -301,7 +302,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
    */
   public onInit(): void {
     console.log('[MAVLinkService] Initializing...');
-    this.startAllStreams();
+    this.startMAVLinkStream();
   }
 
   /**
@@ -310,25 +311,9 @@ export class MAVLinkServiceImpl implements MAVLinkService {
    */
   public onDestroy(): void {
     console.log('[MAVLinkService] Destroying...');
-    this.stopAllStreams();
+    this.stopMAVLinkStream();
     // Reset flight time tracking state
     this.armedStartTime = null;
-  }
-
-  /**
-   * Start MAVLink stream
-   * @private
-   */
-  private startAllStreams(): void {
-    this.startMAVLinkStream();
-  }
-
-  /**
-   * Stop MAVLink stream
-   * @private
-   */
-  private stopAllStreams(): void {
-    this.stopMAVLinkStream();
   }
 
   // ========== MAVLink Stream ==========
@@ -567,8 +552,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
      * Round to 1 decimal place for distinctUntilChanged optimization
      */
     const mslAltitudeMm = globalPositionInt?.alt ?? 0;
-    const mslAltitude =
-      Math.round(mslAltitudeMm * MAVLinkServiceImpl.MM_TO_FEET * 10) / 10;
+    const mslAltitude = Math.round(mslAltitudeMm * MM_TO_FEET * 10) / 10;
 
     /*
      * Convert relative altitude from mm to feet
@@ -577,7 +561,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
      */
     const relativeAltitudeMm = globalPositionInt?.relativeAlt ?? 0;
     const relativeAltitude =
-      Math.round(relativeAltitudeMm * MAVLinkServiceImpl.MM_TO_FEET * 10) / 10;
+      Math.round(relativeAltitudeMm * MM_TO_FEET * 10) / 10;
 
     /*
      * Convert ground speed from m/s to mph
@@ -585,8 +569,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
      * Round to 1 decimal place for distinctUntilChanged optimization
      */
     const groundSpeedMs = vfrHud?.groundspeed ?? 0;
-    const groundSpeed =
-      Math.round(groundSpeedMs * MAVLinkServiceImpl.MS_TO_MPH * 10) / 10;
+    const groundSpeed = Math.round(groundSpeedMs * MS_TO_MPH * 10) / 10;
 
     /*
      * Convert climb rate from m/s to mph
@@ -594,7 +577,7 @@ export class MAVLinkServiceImpl implements MAVLinkService {
      * Round to 1 decimal place for distinctUntilChanged optimization
      */
     const climbMs = vfrHud?.climb ?? 0;
-    const climb = Math.round(climbMs * MAVLinkServiceImpl.MS_TO_MPH * 10) / 10;
+    const climb = Math.round(climbMs * MS_TO_MPH * 10) / 10;
 
     // Heading is already in degrees
     // Round to 1 decimal place for distinctUntilChanged optimization
