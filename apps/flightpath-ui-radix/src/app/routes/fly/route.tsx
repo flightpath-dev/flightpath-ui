@@ -9,10 +9,9 @@ import {
   useComponentId,
   useMAVLinkService,
 } from '../../../providers/useServices';
+import { FEET_TO_METERS } from '../../../utils/unitConversions';
 
 import styles from './route.module.css';
-
-const FEET_TO_METERS = 0.3048;
 
 export function FlyView() {
   const systemId = useSystemId();
