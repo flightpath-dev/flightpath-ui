@@ -74,8 +74,8 @@ pnpm preview          # runs the prod build (go to the appropriate app directory
 | No throttling |     ❌      | 60  |
 | 4x slowdown   |     ❌      | 60  |
 | 6x slowdown   |     ❌      | 60  |
-| 20x slowdown  |     ❌      | 55  |
+| 20x slowdown  |     ❌      | 60  |
 | No throttling |     ✅      | 60  |
-| 4x slowdown   |     ✅      | 42  |
-| 6x slowdown   |     ✅      | 24  |
-| 20x slowdown  |     ✅      | 10  |
+| 4x slowdown   |     ✅      | 58  |
+| 6x slowdown   |     ✅      | 56  |
+| 20x slowdown  |     ✅      | 20  |
