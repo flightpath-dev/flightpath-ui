@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { Flex, Text } from '@radix-ui/themes';
 import { ArrowUp, Home, Play } from 'lucide-react';
 
@@ -18,7 +20,13 @@ interface FlightCommandPanelProps {
   onReturn: () => void;
 }
 
-export default function FlightCommandPanel({
+/**
+ * FlightCommandPanel component for controlling drone flight operations.
+ *
+ * NOTE: This component is wrapped with React.memo() as part of an
+ * over-optimization example. See FlyView component for detailed explanation.
+ */
+function FlightCommandPanelBase({
   className,
   disabled = false,
   onTakeoff,
@@ -122,3 +130,5 @@ export default function FlightCommandPanel({
     </Flex>
   );
 }
+
+export const FlightCommandPanel = memo(FlightCommandPanelBase);
