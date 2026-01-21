@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { Flex } from '@radix-ui/themes';
 
-import FlightCommandPanel from '../../../components/FlightCommandPanel/FlightCommandPanel';
+import { FlightCommandPanel } from '../../../components/FlightCommandPanel/FlightCommandPanel';
 import { MapView } from '../../../components/MapView/MapView';
 import {
   useSystemId,
@@ -13,6 +13,33 @@ import { FEET_TO_METERS } from '../../../utils/unitConversions';
 
 import styles from './route.module.css';
 
+/**
+ * FlyView component - main flight control interface.
+ *
+ * NOTE: This component uses useCallback + React.memo (on FlightCommandPanel)
+ * as an example of over-optimization. In practice, this optimization provides
+ * minimal benefit:
+ *
+ * 1. systemId and componentId are stable after the first drone heartbeat, so
+ *    parent does not re-render because of these,
+ *
+ * 2. The useCallback hooks in this component stabilize callback props, but
+ *    since this component itself does not re-render, the child component will
+ *    not re-render because of these.
+ *
+ * 3. The child component re-renders only when its internal hooks change,
+ *    i.e. useFlightStatus, useMissionProgress. This is expected.
+ *
+ * 4. React.memo on FlightCommandPanel only prevents re-renders triggered by
+ *    parent prop changes. However, we already established that the parent does
+ *    not re-render.
+ *
+ * 5. Drone commands are user-initiated, low-frequency operations where the
+ *    re-render cost is infrequent and negligible.
+ *
+ * This serves as a learning example: memoization should be applied after
+ * profiling identifies actual performance bottlenecks, not preemptively.
+ */
 export function FlyView() {
   const systemId = useSystemId();
   const componentId = useComponentId();
