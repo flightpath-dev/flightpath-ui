@@ -1,13 +1,31 @@
 {
-  "name": "flightpath-ui-shadcn",
+  "name": "@flightpath/autopilot",
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./index.css": "./dist/index.css",
+    "./components/*": {
+      "types": "./src/components/*.tsx",
+      "default": "./dist/components/*.js"
+    },
+    "./lib/*": {
+      "types": "./src/lib/*.ts",
+      "default": "./dist/lib/*.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
   "scripts": {
     "build": "tsc -b && vite build",
     "check-types": "tsc --noEmit",
     "clean": "rimraf node_modules dist",
-    "dev": "vite",
+    "dev": "tsc --watch & vite build --watch",
     "fix": "run-s _lint:fix _format:fix",
     "lint": "run-s _lint _format",
     "preview": "vite preview",
@@ -16,26 +34,16 @@
     "_lint": "eslint .",
     "_lint:fix": "npm run _lint -- --fix"
   },
+  "peerDependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.11.0",
-    "@connectrpc/connect": "^2.1.1",
-    "@connectrpc/connect-web": "^2.1.1",
-    "@flightpath/autopilot": "workspace:*",
-    "@flightpath/flightpath": "^0.0.13",
     "@base-ui/react": "^1.1.0",
     "@fontsource-variable/inter": "^5.2.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
-    "lucide-react": "^0.562.0",
-    "next-themes": "^0.4.6",
-    "observable-hooks": "^4.2.4",
-    "ol": "^10.7.0",
-    "ol-mapbox-style": "^13.2.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-router": "^7.12.0",
-    "rxjs": "^7.8.2"
+    "lucide-react": "^0.562.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
