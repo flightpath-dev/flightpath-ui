@@ -28,8 +28,9 @@ import {
 } from "../StatusIndicator/StatusIndicator";
 
 // DO THIS INSTEAD
-import type { StatusIndicatorColor } from "../StatusIndicator/StatusIndicator";
 import { StatusIndicator } from "../StatusIndicator/StatusIndicator";
+
+import type { StatusIndicatorColor } from "../StatusIndicator/StatusIndicator";
 ```
 
 ### Coding Style for Enumerations
