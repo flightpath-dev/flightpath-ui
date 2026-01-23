@@ -1,7 +1,7 @@
 import { Grid, Flex } from '@radix-ui/themes';
 
 import FlightPathLogo from '../../assets/flightpath-logo.png';
-import { mainNavItems } from '../../config/main-nav';
+import { mainNavItems, RoutePathEnum } from '../../config/RouteConfig';
 import { BatteryRemainingIndicator } from '../BatteryRemainingIndicator/BatteryRemainingIndicator';
 import { FlightModeIndicator } from '../FlightModeIndicator/FlightModeIndicator';
 import { FlightStatusIndicator } from '../FlightStatusIndicator/FlightStatusIndicator';
@@ -34,9 +34,17 @@ export function TopBar() {
 
       {/* Center Section - Mode Navigation */}
       <Flex align="center" gap="2">
-        {mainNavItems.map(({ title, icon, path }) => (
-          <NavLink icon={icon} key={path} path={path} title={title} />
-        ))}
+        {Object.values(RoutePathEnum).map((routePath) => {
+          const navItem = mainNavItems.get(routePath)!;
+          return (
+            <NavLink
+              icon={navItem.icon}
+              key={navItem.path}
+              path={navItem.path}
+              title={navItem.title}
+            />
+          );
+        })}
       </Flex>
 
       {/* Right Section */}
