@@ -1,14 +1,18 @@
 import { StrictMode } from 'react';
 
 import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 
-import { App } from './App.tsx';
+import { routes } from './routes';
 
 import './index.css';
 import '@flightpath/autopilot/index.css';
 
-createRoot(document.getElementById('root')!).render(
+const root = createRoot(document.getElementById('root')!);
+const router = createBrowserRouter(routes);
+
+root.render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </StrictMode>,
 );
