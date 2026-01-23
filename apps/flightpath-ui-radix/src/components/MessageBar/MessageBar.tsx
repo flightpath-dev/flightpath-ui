@@ -29,7 +29,7 @@ function getIcon(severity: Severity) {
       return <CheckCircle size={16} />;
     case 'info':
     default:
-      return <Info />;
+      return <Info size={16} />;
   }
 }
 

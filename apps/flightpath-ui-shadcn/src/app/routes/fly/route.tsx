@@ -1,5 +1,3 @@
 export function FlyView() {
-  return (
-    <div className="flex items-center justify-center h-screen">Fly View</div>
-  );
+  return <div className="flex-1 relative bg-accent"></div>;
 }
