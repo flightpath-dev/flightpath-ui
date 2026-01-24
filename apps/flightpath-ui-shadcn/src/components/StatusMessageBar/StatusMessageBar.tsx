@@ -1,10 +1,10 @@
-import { MessageBar } from '../MessageBar/MessageBar';
+import { MessageBar } from '@flightpath/autopilot/components/MessageBar';
 
-import type { Message } from '../MessageBar/MessageBar';
+import type { Message } from '@flightpath/autopilot/components/MessageBar';
 
 const message: Message = {
   timestamp: new Date(),
-  severity: 'info',
+  severity: 'warning',
   text: 'This is a test message',
 };
 

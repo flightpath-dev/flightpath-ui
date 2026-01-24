@@ -2,7 +2,7 @@ import type { AccentColor } from '../types/AccentColor';
 import type { Severity } from '../types/Severity';
 
 const SEVERITY_COLOR_MAP: Record<Severity, AccentColor> = {
-  info: 'gray',
+  info: 'neutralElevation1',
   success: 'green',
   warning: 'amber',
   error: 'red',

@@ -1,4 +1,4 @@
-import type { Severity } from './Severity';
+import type { Severity } from '@flightpath/autopilot/types/Severity';
 
 export enum FlightStateEnum {
   NotReady = 'notReady',
