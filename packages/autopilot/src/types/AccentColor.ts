@@ -20,7 +20,6 @@ export enum AccentColorEnum {
   Gray = 'gray',
   Zinc = 'zinc',
   Neutral = 'neutral',
-  NeutralElevation1 = 'neutralElevation1',
   Stone = 'stone',
 }
 
