@@ -10,6 +10,7 @@
     "copyfiles",
     "datasources",
     "deepmerge",
+    "fontsource",
     "gomavlib",
     "isbot",
     "manypkg",

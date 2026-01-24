@@ -33,7 +33,7 @@ function getIcon(severity: Severity) {
 export function MessageBar({ message }: MessageBarProps) {
   return (
     <Surface color={severityToColor(message?.severity ?? 'info')}>
-      <div className="flex items-center gap-3 h-8 px-6">
+      <div className="flex items-center gap-3 h-8 px-8">
         {message ? (
           <>
             {getIcon(message.severity)}
