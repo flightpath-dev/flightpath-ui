@@ -75,11 +75,10 @@ packages/autopilot/
 ├── src/
 │   ├── styles/
 │   │   └── globals.css   # Tailwind CSS configuration
-│   ├── lib/
-│   │   └── utils.ts      # Utility functions (cn, etc.)
+│   ├── utils/
+│   │   └── cn.ts         # Utility functions (cn, etc.)
 │   └── components/       # Component files (added via shadcn CLI)
 ├── package.json
 ├── tsconfig.json
-├── vite.config.ts
 └── components.json       # shadcn configuration
 ```
