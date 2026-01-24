@@ -14,9 +14,9 @@
   "aliases": {
     "components": "@/components",
     "hooks": "@/hooks",
-    "lib": "@/lib",
+    "lib": "@/utils",
     "ui": "@flightpath/autopilot/components",
-    "utils": "@flightpath/autopilot/lib/utils"
+    "utils": "@flightpath/autopilot/utils/cn"
   },
   "menuColor": "default",
   "menuAccent": "subtle",
