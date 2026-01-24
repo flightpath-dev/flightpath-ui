@@ -4,8 +4,8 @@ import type { Message } from '@flightpath/autopilot/components/MessageBar';
 
 const message: Message = {
   timestamp: new Date(),
-  severity: 'warning',
-  text: 'This is a test message',
+  severity: 'info',
+  text: 'Takeoff detected',
 };
 
 export function StatusMessageBar() {
