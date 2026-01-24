@@ -5,18 +5,18 @@
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "src/index.css",
+    "css": "src/styles/globals.css",
     "baseColor": "neutral",
     "cssVariables": true,
-    "prefix": "ap"
+    "prefix": ""
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
+    "components": "@flightpath/autopilot/components",
+    "hooks": "@flightpath/autopilot/hooks",
+    "lib": "@flightpath/autopilot/lib",
+    "ui": "@flightpath/autopilot/components",
+    "utils": "@flightpath/autopilot/lib/utils"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

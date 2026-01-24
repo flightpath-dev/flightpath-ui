@@ -5,8 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 
 import { routes } from './routes';
 
-import './index.css';
-import '@flightpath/autopilot/index.css';
+import '@flightpath/autopilot/globals.css';
 
 const root = createRoot(document.getElementById('root')!);
 const router = createBrowserRouter(routes);
