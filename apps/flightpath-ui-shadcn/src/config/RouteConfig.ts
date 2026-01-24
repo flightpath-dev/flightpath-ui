@@ -17,7 +17,7 @@ export interface NavItem {
 }
 
 export const mainNavItems = new Map<RoutePath, NavItem>([
-  ['fly', { path: '/fly', title: 'Fly', icon: Joystick }],
+  ['fly', { path: '/', title: 'Fly', icon: Joystick }],
   ['plan', { path: '/plan', title: 'Plan', icon: Waypoints }],
   ['guide', { path: '/guide', title: 'Guide', icon: Cpu }],
 ]);
