@@ -1,5 +1,3 @@
-import { Navigate } from 'react-router';
-
 import { RootLayout } from './app/root';
 import { FlyView } from './app/routes/fly/route';
 import { GuideView } from './app/routes/guide/route';
@@ -14,10 +12,6 @@ export const routes: RouteObject[] = [
     children: [
       {
         path: '/',
-        element: <Navigate replace to={mainNavItems.get('fly')!.path} />,
-      },
-      {
-        path: mainNavItems.get('fly')!.path,
         element: <FlyView />,
       },
       {
