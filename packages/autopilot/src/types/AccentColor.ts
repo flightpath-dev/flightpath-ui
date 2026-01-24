@@ -1,0 +1,27 @@
+export enum AccentColorEnum {
+  Red = 'red',
+  Orange = 'orange',
+  Amber = 'amber',
+  Yellow = 'yellow',
+  Lime = 'lime',
+  Green = 'green',
+  Emerald = 'emerald',
+  Teal = 'teal',
+  Cyan = 'cyan',
+  Sky = 'sky',
+  Blue = 'blue',
+  Indigo = 'indigo',
+  Violet = 'violet',
+  Purple = 'purple',
+  Fuchsia = 'fuchsia',
+  Pink = 'pink',
+  Rose = 'rose',
+  Slate = 'slate',
+  Gray = 'gray',
+  Zinc = 'zinc',
+  Neutral = 'neutral',
+  NeutralElevation1 = 'neutralElevation1',
+  Stone = 'stone',
+}
+
+export type AccentColor = `${AccentColorEnum}`;

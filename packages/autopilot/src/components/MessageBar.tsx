@@ -1,7 +1,10 @@
 import { format } from 'date-fns';
 import { Info, AlertTriangle, AlertCircle, CheckCircle } from 'lucide-react';
 
-import type { Severity } from '../../types/Severity';
+import { Surface } from './surface';
+import { severityToColor } from '../lib/severityToColor';
+
+import type { Severity } from '../types/Severity';
 
 export interface Message {
   timestamp: Date;
@@ -29,15 +32,19 @@ function getIcon(severity: Severity) {
 
 export function MessageBar({ message }: MessageBarProps) {
   return (
-    <div className="flex items-center gap-3 h-8 px-6 bg-card">
-      {message ? (
-        <>
-          {getIcon(message.severity)}
-          <span>{format(message.timestamp, 'HH:mm:ss')}</span>
-          <div className="w-px h-4 bg-border" />
-          <span className="text-sm truncate flex-1">{message.text}</span>
-        </>
-      ) : null}
-    </div>
+    <Surface color={severityToColor(message?.severity ?? 'info')}>
+      <div className="flex items-center gap-3 h-8 px-6">
+        {message ? (
+          <>
+            {getIcon(message.severity)}
+            <span className="text-xs opacity-60 font-mono">
+              {format(message.timestamp, 'HH:mm:ss')}
+            </span>
+            <div className="w-px h-4 bg-border" />
+            <span className="text-sm truncate flex-1">{message.text}</span>
+          </>
+        ) : null}
+      </div>
+    </Surface>
   );
 }
