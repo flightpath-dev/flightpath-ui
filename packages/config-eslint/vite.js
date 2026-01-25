@@ -1,11 +1,11 @@
+import { defineConfig, globalIgnores } from "eslint/config";
 import js from "@eslint/js";
-import globals from "globals";
+import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
+import importX from "eslint-plugin-import-x";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import tseslint from "typescript-eslint";
-import importX from "eslint-plugin-import-x";
-import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
-import { defineConfig, globalIgnores } from "eslint/config";
+import globals from "globals";
+import ts from "typescript-eslint";
 
 export default defineConfig([
   globalIgnores(["dist"]),
@@ -13,7 +13,7 @@ export default defineConfig([
     files: ["**/*.{ts,tsx}"],
     extends: [
       js.configs.recommended,
-      tseslint.configs.recommended,
+      ts.configs.recommended,
       importX.flatConfigs.recommended,
       importX.flatConfigs.typescript,
       reactHooks.configs.flat.recommended,
