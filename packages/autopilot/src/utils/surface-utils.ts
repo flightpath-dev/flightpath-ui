@@ -102,6 +102,6 @@ export function getSurfaceTextColor(color?: AccentColor) {
       return 'text-stone-700 dark:text-stone-400';
     // -------------------------------------------------------------------
     default:
-      return 'text-neutral-700 dark:text-neutral-400';
+      return 'text-foreground';
   }
 }
