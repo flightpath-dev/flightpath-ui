@@ -1,3 +1,3 @@
 export function PlanView() {
-  return <div>Plan View</div>;
+  return <div className="flex-1 relative bg-accent p-4">Plan View</div>;
 }
