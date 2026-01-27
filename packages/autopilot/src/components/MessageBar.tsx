@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { Info, AlertTriangle, AlertCircle, CheckCircle } from 'lucide-react';
 
-import { Surface } from './surface';
+import { Surface } from './Surface';
 import { severityToColor } from '../utils/severityToColor';
 
 import type { Severity } from '../types/Severity';
