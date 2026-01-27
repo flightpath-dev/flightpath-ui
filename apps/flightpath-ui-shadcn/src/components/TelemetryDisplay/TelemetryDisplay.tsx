@@ -6,7 +6,7 @@ export function TelemetryDisplay() {
   const telemetry = useTelemetry();
 
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-8">
       <MetricDisplay
         label="Alt (MSL)"
         unit="ft"

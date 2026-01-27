@@ -42,6 +42,7 @@
   "exports": {
     "./components/*": "./src/components/*.tsx",
     "./globals.css": "./src/styles/globals.css",
+    "./providers/*": "./src/providers/*.tsx",
     "./hooks/*": "./src/hooks/*.ts",
     "./postcss.config": "./postcss.config.mjs",
     "./types/*": "./src/types/*.ts",
