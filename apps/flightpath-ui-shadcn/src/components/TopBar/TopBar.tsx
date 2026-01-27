@@ -1,20 +1,16 @@
-import FlightPathLogo from '../../assets/flightpath-logo.png';
+import { Logo } from './Logo';
+import { Navigation } from './Navigation';
 
 export function TopBar() {
   return (
     <header className="grid grid-cols-[1fr_auto_1fr] h-14 px-4 border-b">
       {/* Left Section */}
       <div className="flex items-center gap-4">
-        <img
-          alt="Flightpath Logo"
-          height={36}
-          src={FlightPathLogo}
-          width={36}
-        />
+        <Logo />
       </div>
 
       {/* Center Section - Mode Navigation */}
-      <div className="flex items-center gap-2">Mode Navigation</div>
+      <Navigation />
 
       {/* Right Section */}
       <div className="flex items-center gap-5 justify-end">Right Section</div>
