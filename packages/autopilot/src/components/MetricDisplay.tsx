@@ -14,13 +14,15 @@ export function MetricDisplay({
   label,
   value,
   unit,
-  color,
+  color = 'neutral',
 }: MetricDisplayProps) {
   return (
     <div className="flex flex-col">
       <span className="text-muted-foreground text-xs">{label}</span>
       <div className="flex items-baseline gap-1">
-        <span className={cn('font-mono text-lg', getSurfaceTextColor(color))}>
+        <span
+          className={cn('font-mono text-lg', getSurfaceTextColor(color, true))}
+        >
           {value}
         </span>
         {unit !== undefined && unit !== '' && (

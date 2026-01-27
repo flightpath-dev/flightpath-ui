@@ -1,6 +1,6 @@
 import type { AccentColor } from '../types/AccentColor';
 
-export function getSurfaceBgColor(color?: AccentColor) {
+export function getSurfaceBgColor(color: AccentColor) {
   switch (color) {
     case 'red':
       return 'bg-red-50 dark:bg-red-950/70';
@@ -48,12 +48,13 @@ export function getSurfaceBgColor(color?: AccentColor) {
     case 'stone':
       return 'bg-stone-100 dark:bg-stone-800/70';
     // -------------------------------------------------------------------
-    default:
-      return 'bg-neutral-100 dark:bg-neutral-800/70';
   }
 }
 
-export function getSurfaceTextColor(color?: AccentColor) {
+export function getSurfaceTextColor(
+  color: AccentColor,
+  highContrast: boolean = false,
+) {
   switch (color) {
     case 'red':
       return 'text-red-700 dark:text-red-400';
@@ -91,17 +92,25 @@ export function getSurfaceTextColor(color?: AccentColor) {
       return 'text-rose-700 dark:text-rose-400';
     // ---------- slightly elevated background than the default ----------
     case 'slate':
-      return 'text-slate-700 dark:text-slate-400';
+      return highContrast
+        ? 'text-foreground'
+        : 'text-slate-700 dark:text-slate-400';
     case 'gray':
-      return 'text-gray-700 dark:text-gray-400';
+      return highContrast
+        ? 'text-foreground'
+        : 'text-gray-700 dark:text-gray-400';
     case 'zinc':
-      return 'text-zinc-700 dark:text-zinc-400';
+      return highContrast
+        ? 'text-foreground'
+        : 'text-zinc-700 dark:text-zinc-400';
     case 'neutral':
-      return 'text-neutral-700 dark:text-neutral-400';
+      return highContrast
+        ? 'text-foreground'
+        : 'text-neutral-700 dark:text-neutral-400';
     case 'stone':
-      return 'text-stone-700 dark:text-stone-400';
+      return highContrast
+        ? 'text-foreground'
+        : 'text-stone-700 dark:text-stone-400';
     // -------------------------------------------------------------------
-    default:
-      return 'text-foreground';
   }
 }

@@ -6,13 +6,15 @@ import type { ReactNode, HTMLAttributes } from 'react';
 
 export interface SurfaceProps extends HTMLAttributes<HTMLElement> {
   className?: string;
-  color?: AccentColor;
+  color: AccentColor;
+  highContrast?: boolean;
   children: ReactNode;
 }
 
 export function Surface({
   className,
   color,
+  highContrast = false,
   children,
   ...props
 }: SurfaceProps) {
@@ -20,7 +22,7 @@ export function Surface({
     <div
       className={cn(
         getSurfaceBgColor(color),
-        getSurfaceTextColor(color),
+        getSurfaceTextColor(color, highContrast),
         className,
       )}
       {...props}
