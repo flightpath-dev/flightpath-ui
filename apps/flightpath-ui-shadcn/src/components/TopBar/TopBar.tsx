@@ -3,6 +3,8 @@ import { ModeToggle } from '@flightpath/autopilot/components/ModeToggle';
 import { Logo } from './Logo';
 import { Navigation } from './Navigation';
 import { BatteryRemainingIndicator } from '../BatteryRemainingIndicator/BatteryRemainingIndicator';
+import { FlightModeIndicator } from '../FlightModeIndicator/FlightModeIndicator';
+import { FlightStatusIndicator } from '../FlightStatusIndicator/FlightStatusIndicator';
 import { RssiIndicator } from '../RssiIndicator/RssiIndicator';
 import { SatelliteCountIndicator } from '../SatelliteCountIndicator/SatelliteCountIndicator';
 
@@ -12,6 +14,8 @@ export function TopBar() {
       {/* Left Section */}
       <div className="flex items-center gap-4">
         <Logo />
+        <FlightStatusIndicator />
+        <FlightModeIndicator />
       </div>
 
       {/* Center Section - Mode Navigation */}
