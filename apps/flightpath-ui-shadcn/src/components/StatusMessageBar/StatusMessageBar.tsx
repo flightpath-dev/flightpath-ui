@@ -1,13 +1,9 @@
 import { MessageBar } from '@flightpath/autopilot/components/MessageBar';
 
-import type { Message } from '@flightpath/autopilot/components/MessageBar';
-
-const message: Message = {
-  timestamp: new Date(),
-  severity: 'info',
-  text: 'Takeoff detected',
-};
+import { useStatusMessage } from '../../providers/useServices';
 
 export function StatusMessageBar() {
+  const message = useStatusMessage();
+
   return <MessageBar message={message} />;
 }
