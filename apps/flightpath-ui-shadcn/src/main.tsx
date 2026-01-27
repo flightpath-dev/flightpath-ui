@@ -3,6 +3,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 
+import { MAVLinkServiceProvider } from './providers/MAVLinkServiceProvider';
 import { routes } from './routes';
 
 import '@flightpath/autopilot/globals.css';
@@ -15,6 +16,8 @@ document.documentElement.classList.add('dark');
 
 root.render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <MAVLinkServiceProvider>
+      <RouterProvider router={router} />
+    </MAVLinkServiceProvider>
   </StrictMode>,
 );
