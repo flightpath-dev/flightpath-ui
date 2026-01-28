@@ -16,6 +16,7 @@ export function NavLink({ title, icon: Icon, path }: NavLinkProps) {
   return (
     <Button
       variant={isActive ? 'default' : 'secondary'}
+      size="lg"
       nativeButton={false}
       render={
         <Link to={path}>
