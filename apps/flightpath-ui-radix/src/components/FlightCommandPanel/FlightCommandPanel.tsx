@@ -43,8 +43,12 @@ function FlightCommandPanelBase({
   const isMissionActive =
     isMissionLoaded && (flightState === 'flying' || flightState === 'landing');
 
+  const isTakeoffDisabled = disabled || flightState !== 'readyToFly';
+  const isMissionDisabled = disabled || !isMissionLoaded;
+  const isReturnDisabled = disabled || flightState !== 'flying';
+
   const missionProgressText = isMissionLoaded
-    ? `Step ${missionProgress.seq + 1} / ${missionProgress.total}`
+    ? `Step ${missionProgress.seq + 1}/${missionProgress.total}`
     : undefined;
 
   return (
@@ -56,10 +60,7 @@ function FlightCommandPanelBase({
       <TakeoffDialog
         onTakeoff={onTakeoff}
         trigger={
-          <button
-            className={styles.button}
-            disabled={disabled || flightState !== 'readyToFly'}
-          >
+          <button className={styles.button} disabled={isTakeoffDisabled}>
             <Flex align="center" direction="column" gap="1">
               <ArrowUp size={24} />
               <Text className={styles.label} size="1">
@@ -84,7 +85,7 @@ function FlightCommandPanelBase({
                   ? styles.missionButtonLoaded
                   : ''
             }`}
-            disabled={disabled || !isMissionLoaded}
+            disabled={isMissionDisabled}
           >
             <Flex align="center" direction="column" gap="1">
               <Play size={24} />
@@ -117,7 +118,7 @@ function FlightCommandPanelBase({
 
       <button
         className={styles.button}
-        disabled={disabled || flightState !== 'flying'}
+        disabled={isReturnDisabled}
         onClick={onReturn}
       >
         <Flex align="center" direction="column" gap="1">

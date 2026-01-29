@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button, Dialog, Flex, Text, TextField } from '@radix-ui/themes';
 import { ArrowUp } from 'lucide-react';
 
 import { Surface } from '../Surface/Surface';
+
+const DEFAULT_TAKEOFF_ALTITUDE_FT = 10;
 
 interface TakeoffDialogProps {
   onTakeoff: (altitudeFt: number) => void;
@@ -12,10 +14,16 @@ interface TakeoffDialogProps {
 
 export function TakeoffDialog({ onTakeoff, trigger }: TakeoffDialogProps) {
   const [open, setOpen] = useState(false);
-  const [altitude, setAltitude] = useState('10');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.value = DEFAULT_TAKEOFF_ALTITUDE_FT.toString();
+    }
+  }, [open]);
 
   const handleConfirm = () => {
-    const altitudeFt = parseFloat(altitude);
+    const altitudeFt = parseFloat(inputRef.current?.value || '');
     if (!isNaN(altitudeFt) && altitudeFt > 0) {
       onTakeoff(altitudeFt);
       setOpen(false);
@@ -44,11 +52,8 @@ export function TakeoffDialog({ onTakeoff, trigger }: TakeoffDialogProps) {
             Takeoff Altitude (ft)
           </Text>
           <TextField.Root
-            value={altitude}
-            onChange={(e) => setAltitude(e.target.value)}
-            type="number"
-            min="0"
-            step="0.1"
+            ref={inputRef}
+            defaultValue={DEFAULT_TAKEOFF_ALTITUDE_FT.toString()}
           />
           <Text size="1" color="gray">
             The drone will climb to this altitude and hold position
