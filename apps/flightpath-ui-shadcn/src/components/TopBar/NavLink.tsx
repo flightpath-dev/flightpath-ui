@@ -1,4 +1,4 @@
-import { Button } from '@flightpath/autopilot/components/button';
+import { Button } from '@flightpath/autopilot/components/Button';
 import { Link, useLocation } from 'react-router';
 
 import type { LucideIcon } from 'lucide-react';
