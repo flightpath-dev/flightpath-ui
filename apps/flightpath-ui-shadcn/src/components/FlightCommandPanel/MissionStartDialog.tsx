@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button } from '@flightpath/autopilot/components/ButtonTemp';
+import { Button } from '@flightpath/autopilot/components/Button';
 import {
   Dialog,
   DialogClose,
@@ -66,7 +66,7 @@ export function MissionStartDialog({
         <DialogFooter>
           <DialogClose render={<Button variant="outline">Cancel</Button>} />
           <Button onClick={handleConfirm}>
-            <Play size="size-4" />
+            <Play className="size-4" />
             Start Mission
           </Button>
         </DialogFooter>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Button } from '@flightpath/autopilot/components/ButtonTemp';
+import { Button } from '@flightpath/autopilot/components/Button';
 import {
   Dialog,
   DialogClose,
@@ -81,7 +81,7 @@ export function TakeoffDialog({ onTakeoff, trigger }: TakeoffDialogProps) {
         <DialogFooter>
           <DialogClose render={<Button variant="outline">Cancel</Button>} />
           <Button onClick={handleConfirm}>
-            <ArrowUp size="size-4" />
+            <ArrowUp className="size-4" />
             Confirm Takeoff
           </Button>
         </DialogFooter>
