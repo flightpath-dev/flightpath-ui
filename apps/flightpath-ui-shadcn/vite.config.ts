@@ -7,9 +7,9 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   clearScreen: false,
   server: {
-    port: 3001,
+    port: 3000,
   },
   preview: {
-    port: 3001,
+    port: 3000,
   },
 });
