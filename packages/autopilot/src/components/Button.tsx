@@ -14,7 +14,8 @@ const ButtonVariantEnum = {
   Link: 'link',
 } as const;
 
-export type ButtonVariant = (typeof ButtonVariantEnum)[keyof typeof ButtonVariantEnum];
+export type ButtonVariant =
+  (typeof ButtonVariantEnum)[keyof typeof ButtonVariantEnum];
 
 const ButtonSizeEnum = {
   Default: 'default',
@@ -30,7 +31,8 @@ const ButtonSizeEnum = {
 export type ButtonSize = (typeof ButtonSizeEnum)[keyof typeof ButtonSizeEnum];
 
 const variantStyles: Record<ButtonVariant, string> = {
-  [ButtonVariantEnum.Default]: 'bg-primary text-primary-foreground hover:bg-primary/80',
+  [ButtonVariantEnum.Default]:
+    'bg-primary text-primary-foreground hover:bg-primary/80',
   [ButtonVariantEnum.Outline]:
     'border-border dark:bg-input/30 hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground',
   [ButtonVariantEnum.Secondary]:
@@ -52,7 +54,8 @@ const sizeStyles: Record<ButtonSize, string> = {
   [ButtonSizeEnum.Lg]:
     'h-8 gap-1 px-2.5 text-xs/relaxed has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*=size-])]:size-4',
   [ButtonSizeEnum.Icon]: 'size-7 [&_svg:not([class*=size-])]:size-3.5',
-  [ButtonSizeEnum.IconXs]: 'size-5 rounded-sm [&_svg:not([class*=size-])]:size-2.5',
+  [ButtonSizeEnum.IconXs]:
+    'size-5 rounded-sm [&_svg:not([class*=size-])]:size-2.5',
   [ButtonSizeEnum.IconSm]: 'size-6 [&_svg:not([class*=size-])]:size-3',
   [ButtonSizeEnum.IconLg]: 'size-8 [&_svg:not([class*=size-])]:size-4',
 };
