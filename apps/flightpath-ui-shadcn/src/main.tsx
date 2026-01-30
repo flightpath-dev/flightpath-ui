@@ -12,9 +12,6 @@ import '@flightpath/autopilot/globals.css';
 const root = createRoot(document.getElementById('root')!);
 const router = createBrowserRouter(routes);
 
-// Temporarily hard-code the dark theme
-document.documentElement.classList.add('dark');
-
 root.render(
   <StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
