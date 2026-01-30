@@ -1,6 +1,7 @@
 import { RootLayout } from './app/root';
 import { FlyView } from './app/routes/fly/route';
 import { GuideView } from './app/routes/guide/route';
+import { NotFoundView } from './app/routes/not-found/route';
 import { PlanView } from './app/routes/plan/route';
 import { mainNavItems } from './config/RouteConfig';
 
@@ -23,5 +24,9 @@ export const routes: RouteObject[] = [
         element: <GuideView />,
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFoundView />,
   },
 ];
