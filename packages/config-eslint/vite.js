@@ -4,6 +4,7 @@ import { createTypeScriptImportResolver } from "eslint-import-resolver-typescrip
 import importX from "eslint-plugin-import-x";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import storybook from "eslint-plugin-storybook";
 import globals from "globals";
 import ts from "typescript-eslint";
 
@@ -18,6 +19,7 @@ export default defineConfig([
       importX.flatConfigs.typescript,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
+      storybook.configs["flat/recommended"],
     ],
     settings: {
       "import-x/resolver-next": [createTypeScriptImportResolver()],

@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.0",
-    "@eslint/js": "^9.39.2",
+    "@repo/eslint-config": "workspace:*",
     "@storybook/addon-a11y": "^10.2.3",
     "@storybook/addon-docs": "^10.2.3",
     "@storybook/addon-vitest": "^10.2.3",
@@ -41,9 +41,6 @@
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^9.39.2",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.26",
-    "eslint-plugin-storybook": "^10.2.3",
     "globals": "^17.2.0",
     "playwright": "^1.58.0",
     "storybook": "^10.2.3",

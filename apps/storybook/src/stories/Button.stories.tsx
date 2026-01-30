@@ -1,10 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import {
   Button,
   ButtonSizeEnum,
   ButtonVariantEnum,
 } from '@flightpath/autopilot/components/Button';
+import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const docDescription = `
 Displays a button or a component that looks like a button.

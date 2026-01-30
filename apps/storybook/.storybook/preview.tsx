@@ -1,6 +1,5 @@
-import React from 'react';
-import type { Preview } from '@storybook/react-vite';
-import '@flightpath/autopilot/globals.css';
+import * as React from 'react';
+
 import {
   Title,
   Subtitle,
@@ -10,6 +9,10 @@ import {
   Stories,
 } from '@storybook/addon-docs/blocks';
 import { themes } from 'storybook/theming';
+
+import type { Preview } from '@storybook/react-vite';
+
+import '@flightpath/autopilot/globals.css';
 
 // Apply class 'dark' to the <html> element of the Storybook preview iframe.
 // This triggers tailwind to go into dark mode.
