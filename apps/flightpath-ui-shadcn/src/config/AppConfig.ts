@@ -2,7 +2,6 @@
  * Application configuration
  * Reads from Vite environment variables
  */
-
 interface AppConfig {
   grpcServerUrl: string;
   environment: 'development' | 'production' | 'staging';
@@ -47,7 +46,7 @@ function loadConfig(): AppConfig {
  */
 export const config = loadConfig();
 
-// Log on startup in development
+// Log config on startup
 if (config.environment === 'development') {
   console.log('[Config] Loaded configuration:', config);
 }
