@@ -2,10 +2,20 @@ import { useEffect, useState } from 'react';
 
 import { MetricDisplay } from './MetricDisplay';
 
-import type { AccentColor } from '../types/AccentColor';
+import type { Severity } from '../types/Severity';
+
+function getFPSSeverity(fps: number): Severity {
+  if (fps >= 50) return 'success';
+  if (fps >= 30) return 'warning';
+  return 'error';
+}
+
+interface FPSMeterProps {
+  padding?: string;
+}
 
 // Measures and displays frames per second (FPS) in real time
-export function FPSMeter() {
+export function FPSMeter({ padding }: FPSMeterProps) {
   const [fps, setFps] = useState(60);
 
   useEffect(() => {
@@ -49,18 +59,13 @@ export function FPSMeter() {
     };
   }, []);
 
-  const getFPSColor = (): AccentColor => {
-    if (fps >= 50) return 'green';
-    if (fps >= 30) return 'amber';
-    return 'red';
-  };
-
   return (
     <MetricDisplay
-      color={getFPSColor()}
       label="Frame Rate"
-      unit="FPS"
       value={fps.toString()}
+      unit="FPS"
+      severity={getFPSSeverity(fps)}
+      className={padding}
     />
   );
 }

@@ -1,50 +1,54 @@
 import { format } from 'date-fns';
-import { Info, AlertTriangle, AlertCircle, CheckCircle } from 'lucide-react';
+import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 
-import { Surface } from './Surface';
+import { cn } from '../utils/cn';
 import { severityToColor } from '../utils/severityToColor';
 
+import type { Message } from '../types/Message';
 import type { Severity } from '../types/Severity';
-
-export interface Message {
-  timestamp: Date;
-  severity: Severity;
-  text: string;
-}
 
 interface MessageBarProps {
   message: Message | null;
+  className?: string;
 }
 
 function getIcon(severity: Severity) {
   switch (severity) {
-    case 'error':
-      return <AlertCircle className="w-4 h-4" />;
-    case 'warning':
-      return <AlertTriangle className="w-4 h-4" />;
+    case 'info':
+      return <Info className="w-4 h-4" />;
     case 'success':
       return <CheckCircle className="w-4 h-4" />;
-    case 'info':
-    default:
-      return <Info className="w-4 h-4" />;
+    case 'warning':
+      return <AlertTriangle className="w-4 h-4" />;
+    case 'error':
+      return <AlertCircle className="w-4 h-4" />;
   }
 }
 
-export function MessageBar({ message }: MessageBarProps) {
+export function MessageBar({ message, className }: MessageBarProps) {
+  const colors = severityToColor(message ? message.severity : 'info');
+
   return (
-    <Surface color={severityToColor(message?.severity ?? 'info')}>
-      <div className="flex items-center gap-3 h-8 px-8">
-        {message ? (
+    <div
+      className={cn(
+        'border-t backdrop-blur-sm',
+        colors.bg,
+        colors.border,
+        className,
+      )}
+    >
+      <div className={cn('flex items-center gap-3 px-6 h-9', colors.text)}>
+        {message && (
           <>
-            {getIcon(message.severity)}
-            <span className="text-xs opacity-60 font-mono">
+            <div>{getIcon(message.severity)}</div>
+            <span className="text-xs font-mono">
               {format(message.timestamp, 'HH:mm:ss')}
             </span>
-            <div className="w-px h-4 bg-border" />
+            <div className="w-px h-4 bg-white/10" />
             <span className="text-sm truncate flex-1">{message.text}</span>
           </>
-        ) : null}
+        )}
       </div>
-    </Surface>
+    </div>
   );
 }

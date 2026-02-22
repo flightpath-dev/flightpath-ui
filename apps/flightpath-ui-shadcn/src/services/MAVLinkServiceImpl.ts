@@ -646,26 +646,26 @@ export class MAVLinkServiceImpl implements MAVLinkService {
 
     // Standby (ready but disarmed)
     if (systemStatus === MavState.STANDBY) {
-      return { state: 'readyToFly', severity: 'info' };
+      return { state: 'readyToFly', severity: 'success' };
     }
 
     // Active (armed/flying)
     if (systemStatus === MavState.ACTIVE && isArmed) {
       switch (landedState) {
         case MavLandedState.ON_GROUND:
-          return { state: 'armed', severity: 'info' };
+          return { state: 'armed', severity: 'warning' };
         case MavLandedState.IN_AIR:
         case MavLandedState.TAKEOFF:
           return { state: 'flying', severity: 'info' };
         case MavLandedState.LANDING:
-          return { state: 'landing', severity: 'info' };
+          return { state: 'landing', severity: 'warning' };
         default:
-          return { state: 'armed', severity: 'info' };
+          return { state: 'armed', severity: 'warning' };
       }
     }
 
     // Default fallback
-    return { state: 'readyToFly', severity: 'info' };
+    return { state: 'readyToFly', severity: 'success' };
   }
 
   /**

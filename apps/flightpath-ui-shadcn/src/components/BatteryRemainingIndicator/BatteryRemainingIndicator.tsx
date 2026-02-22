@@ -1,4 +1,4 @@
-import { IconText } from '@flightpath/autopilot/components/IconText';
+import { MetricDisplay } from '@flightpath/autopilot/components/MetricDisplay';
 import {
   BatteryLow,
   BatteryMedium,
@@ -8,18 +8,36 @@ import {
 
 import { useBatteryRemaining } from '../../providers/useServices';
 
-const getBatteryIcon = (percentage: number) => {
+import type { Severity } from '@flightpath/autopilot/types/Severity';
+
+const getIcon = (percentage: number) => {
   if (percentage === 0) return BatteryIcon;
-  if (percentage < 25) return BatteryLow;
-  if (percentage < 75) return BatteryMedium;
+  if (percentage < 30) return BatteryLow;
+  if (percentage < 60) return BatteryMedium;
   return BatteryFull;
 };
 
-export function BatteryRemainingIndicator() {
+const getSeverity = (percentage: number): Severity => {
+  if (percentage < 30) return 'error';
+  if (percentage < 60) return 'warning';
+  return 'success';
+};
+
+interface BatteryRemainingIndicatorProps {
+  padding?: string;
+}
+
+export function BatteryRemainingIndicator({
+  padding,
+}: BatteryRemainingIndicatorProps) {
   const percentage = useBatteryRemaining();
   return (
-    <IconText icon={getBatteryIcon(percentage)} mono>
-      {percentage}%
-    </IconText>
+    <MetricDisplay
+      label="Battery"
+      value={`${percentage}%`}
+      icon={getIcon(percentage)}
+      severity={getSeverity(percentage)}
+      className={padding}
+    />
   );
 }

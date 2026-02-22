@@ -1,32 +1,33 @@
-import { RootLayout } from './app/root';
-import { FlyView } from './app/routes/fly/route';
-import { GuideView } from './app/routes/guide/route';
-import { NotFoundView } from './app/routes/not-found/route';
-import { PlanView } from './app/routes/plan/route';
+import { RootLayout } from './app/RootLayout';
+import { FlyPage } from './app/routes/fly/FlyPage';
+import { GuidePage } from './app/routes/guide/GuidePage';
+import { MissionsPage } from './app/routes/missions/MissionsPage';
+import { NotFoundPage } from './app/routes/not-found/NotFoundPage';
+import { SettingsPage } from './app/routes/settings/SettingsPage';
 import { mainNavItems } from './config/RouteConfig';
 
+import type { ReactNode } from 'react';
 import type { RouteObject } from 'react-router';
+
+const navElementByPath: Record<string, ReactNode> = {
+  '/': <FlyPage />,
+  '/guide': <GuidePage />,
+  '/missions': <MissionsPage />,
+  '/settings': <SettingsPage />,
+};
 
 export const routes: RouteObject[] = [
   {
     element: <RootLayout />,
     children: [
-      {
-        path: '/',
-        element: <FlyView />,
-      },
-      {
-        path: mainNavItems.get('plan')!.path,
-        element: <PlanView />,
-      },
-      {
-        path: mainNavItems.get('guide')!.path,
-        element: <GuideView />,
-      },
+      ...mainNavItems.map((item) => ({
+        path: item.path,
+        element: navElementByPath[item.path],
+      })),
     ],
   },
   {
     path: '*',
-    element: <NotFoundView />,
+    element: <NotFoundPage />,
   },
 ];

@@ -1,13 +1,14 @@
 import { useCallback } from 'react';
 
-import { FlightCommandPanel } from '../../../components/FlightCommandPanel/FlightCommandPanel';
-import { MapView } from '../../../components/MapView/MapView';
+import { FlightCommandPanel } from '../../../../components/FlightCommandPanel/FlightCommandPanel';
+import { FlightStatusIndicator } from '../../../../components/FlightStatusIndicator/FlightStatusIndicator';
+import { MapView } from '../../../../components/MapView/MapView';
 import {
   useSystemId,
   useComponentId,
   useMAVLinkService,
-} from '../../../providers/useServices';
-import { FEET_TO_METERS } from '../../../utils/unitConversions';
+} from '../../../../providers/useServices';
+import { FEET_TO_METERS } from '../../../../utils/unitConversions';
 
 /**
  * FlyView component - main flight control interface.
@@ -36,7 +37,7 @@ import { FEET_TO_METERS } from '../../../utils/unitConversions';
  * This serves as a learning example: memoization should be applied after
  * profiling identifies actual performance bottlenecks, not preemptively.
  */
-export function FlyView() {
+export function FlyMap() {
   const systemId = useSystemId();
   const componentId = useComponentId();
   const mavlinkService = useMAVLinkService();
@@ -95,8 +96,10 @@ export function FlyView() {
     <div className="flex-1 relative">
       <MapView />
 
+      <FlightStatusIndicator className="absolute top-4 left-4 z-10" />
+
       <FlightCommandPanel
-        className="fixed top-16 left-4 z-40"
+        className="absolute top-20 left-4 z-40"
         disabled={systemId === null || componentId === null}
         onMissionStart={handleMissionStart}
         onReturn={handleLand}

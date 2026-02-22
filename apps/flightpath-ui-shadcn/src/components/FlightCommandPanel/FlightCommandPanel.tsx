@@ -54,14 +54,17 @@ function FlightCommandPanelBase({
   return (
     <div
       className={cn(
-        'w-16 flex flex-col gap-1 bg-background backdrop-blur-md rounded-lg py-2 border border-white/10',
+        'w-16 flex flex-col gap-1 bg-black/90 backdrop-blur-md rounded-lg py-2 border border-white/10',
         className,
       )}
     >
       <TakeoffDialog
         onTakeoff={onTakeoff}
         trigger={
-          <CommandButton disabled={isTakeoffDisabled}>
+          <CommandButton
+            disabled={isTakeoffDisabled}
+            className="hover:bg-white/10"
+          >
             <ArrowUp className="size-6" />
             <span>Takeoff</span>
           </CommandButton>
@@ -79,6 +82,13 @@ function FlightCommandPanelBase({
             color={
               isMissionActive ? 'amber' : isMissionLoaded ? 'green' : undefined
             }
+            className={
+              isMissionActive
+                ? undefined
+                : isMissionLoaded
+                  ? 'hover:bg-green-400/10'
+                  : undefined
+            }
           >
             <Play className="size-6" />
             <span>Mission</span>
@@ -93,7 +103,11 @@ function FlightCommandPanelBase({
 
       <Separator />
 
-      <CommandButton disabled={isReturnDisabled} onClick={onReturn}>
+      <CommandButton
+        disabled={isReturnDisabled}
+        onClick={onReturn}
+        className="hover:bg-white/10"
+      >
         <Home className="size-6" />
         <span>Return</span>
       </CommandButton>

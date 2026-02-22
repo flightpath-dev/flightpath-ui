@@ -2,46 +2,35 @@ import { MetricDisplay } from '@flightpath/autopilot/components/MetricDisplay';
 
 import { useTelemetry } from '../../providers/useServices';
 
-export function TelemetryDisplay() {
+interface TelemetryDisplayProps {
+  padding?: string;
+}
+
+export function TelemetryDisplay({ padding }: TelemetryDisplayProps) {
   const telemetry = useTelemetry();
 
   return (
-    <div className="flex gap-8">
+    <>
       <MetricDisplay
         label="Alt (MSL)"
-        unit="ft"
         value={telemetry.mslAltitude.toFixed(1)}
+        unit="ft"
+        className={padding}
       />
 
       <MetricDisplay
         label="Alt (Rel)"
-        unit="ft"
         value={telemetry.relativeAltitude.toFixed(1)}
+        unit="ft"
+        className={padding}
       />
 
       <MetricDisplay
         label="Ground Speed"
-        unit="mph"
         value={telemetry.groundSpeed.toFixed(1)}
-      />
-
-      <MetricDisplay
-        label="Climb Rate"
         unit="mph"
-        value={telemetry.climb.toFixed(1)}
+        className={padding}
       />
-
-      <MetricDisplay
-        label="Heading"
-        unit="deg"
-        value={telemetry.heading.toFixed(1)}
-      />
-
-      <MetricDisplay
-        label="Throttle"
-        unit="%"
-        value={telemetry.throttle.toFixed(1)}
-      />
-    </div>
+    </>
   );
 }
