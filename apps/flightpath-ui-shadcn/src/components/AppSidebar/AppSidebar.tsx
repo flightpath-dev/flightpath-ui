@@ -27,7 +27,7 @@ export function AppSidebar() {
                     isActive={location.pathname === path}
                     render={
                       <Link to={path}>
-                        <Icon className="w-5 h-5" />
+                        <Icon />
                         <span>{title}</span>
                       </Link>
                     }
