@@ -1,6 +1,6 @@
 import type { AccentColor } from '../types/AccentColor';
 
-export function getSurfaceBgColor(color: AccentColor) {
+export function accentToBgColor(color: AccentColor) {
   switch (color) {
     case 'red':
       return 'bg-red-50 dark:bg-red-950/70';
@@ -51,7 +51,7 @@ export function getSurfaceBgColor(color: AccentColor) {
   }
 }
 
-export function getSurfaceTextColor(
+export function accentToTextColor(
   color: AccentColor,
   highContrast: boolean = false,
 ) {

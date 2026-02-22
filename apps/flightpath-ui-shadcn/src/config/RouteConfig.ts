@@ -1,14 +1,6 @@
-import { Cpu, Joystick, Waypoints } from 'lucide-react';
+import { Cpu, Joystick, Waypoints, Settings } from 'lucide-react';
 
 import type { LucideIcon } from 'lucide-react';
-
-export enum RoutePathEnum {
-  Fly = 'fly',
-  Plan = 'plan',
-  Guide = 'guide',
-}
-
-export type RoutePath = `${RoutePathEnum}`;
 
 export interface NavItem {
   path: string;
@@ -16,8 +8,9 @@ export interface NavItem {
   icon: LucideIcon;
 }
 
-export const mainNavItems = new Map<RoutePath, NavItem>([
-  ['fly', { path: '/', title: 'Fly', icon: Joystick }],
-  ['plan', { path: '/plan', title: 'Plan', icon: Waypoints }],
-  ['guide', { path: '/guide', title: 'Guide', icon: Cpu }],
-]);
+export const mainNavItems: NavItem[] = [
+  { path: '/', title: 'Fly', icon: Joystick },
+  { path: '/guide', title: 'Guide', icon: Cpu },
+  { path: '/missions', title: 'Missions', icon: Waypoints },
+  { path: '/settings', title: 'Settings', icon: Settings },
+];

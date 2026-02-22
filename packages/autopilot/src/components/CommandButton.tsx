@@ -1,5 +1,5 @@
+import { accentToTextColor } from '../utils/accentToColor';
 import { cn } from '../utils/cn';
-import { getSurfaceTextColor } from '../utils/surface-utils';
 
 import type { AccentColor } from '../types/AccentColor';
 
@@ -13,7 +13,7 @@ export function CommandButton({
   children,
   ...props
 }: CommandButtonProps) {
-  const colorClass = color ? getSurfaceTextColor(color) : undefined;
+  const colorClass = color ? accentToTextColor(color) : undefined;
 
   return (
     <button

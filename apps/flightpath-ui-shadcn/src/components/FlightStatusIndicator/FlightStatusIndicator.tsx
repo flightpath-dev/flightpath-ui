@@ -1,4 +1,3 @@
-import { StatusIndicator } from '@flightpath/autopilot/components/StatusIndicator';
 import { severityToColor } from '@flightpath/autopilot/utils/severityToColor';
 
 import { useFlightStatus } from '../../providers/useServices';
@@ -6,19 +5,34 @@ import { useFlightStatus } from '../../providers/useServices';
 import type { FlightState } from '../../types/FlightStatus';
 
 const STATUS_DISPLAY_TEXT_MAP: Record<FlightState, string> = {
-  notReady: 'Not Ready',
-  readyToFly: 'Ready To Fly',
-  armed: 'Armed',
-  flying: 'Flying',
-  landing: 'Landing...',
-  communicationLost: 'Communication Lost',
+  notReady: 'NOT READY',
+  readyToFly: 'READY TO FLY',
+  armed: 'ARMED',
+  flying: 'FLYING',
+  landing: 'LANDING...',
+  communicationLost: 'COMMUNICATION LOST',
 };
 
-export function FlightStatusIndicator() {
+interface FlightStatusIndicatorProps {
+  // Provided for positioning
+  className?: string;
+}
+
+export function FlightStatusIndicator({
+  className,
+}: FlightStatusIndicatorProps) {
   const status = useFlightStatus();
+  const colors = severityToColor(status.severity);
+
   return (
-    <StatusIndicator color={severityToColor(status.severity)} highContrast>
-      {STATUS_DISPLAY_TEXT_MAP[status.state]}
-    </StatusIndicator>
+    <div
+      className={`bg-black/90 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-md ${className}`}
+    >
+      <div
+        className={`font-mono text-base font-bold whitespace-nowrap ${colors.text}`}
+      >
+        {STATUS_DISPLAY_TEXT_MAP[status.state]}
+      </div>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 
+import { TooltipProvider } from '@flightpath/autopilot/components/Tooltip';
 import { ThemeProvider } from '@flightpath/autopilot/providers/ThemeProvider/ThemeProvider';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
@@ -15,9 +16,11 @@ const router = createBrowserRouter(routes);
 root.render(
   <StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
-      <MAVLinkServiceProvider>
-        <RouterProvider router={router} />
-      </MAVLinkServiceProvider>
+      <TooltipProvider>
+        <MAVLinkServiceProvider>
+          <RouterProvider router={router} />
+        </MAVLinkServiceProvider>
+      </TooltipProvider>
     </ThemeProvider>
   </StrictMode>,
 );

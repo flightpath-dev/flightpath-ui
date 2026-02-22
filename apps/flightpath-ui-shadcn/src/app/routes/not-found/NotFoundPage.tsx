@@ -9,7 +9,7 @@ import {
 import { MapPinOff } from 'lucide-react';
 import { Link } from 'react-router';
 
-export function NotFoundView() {
+export function NotFoundPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md text-center">

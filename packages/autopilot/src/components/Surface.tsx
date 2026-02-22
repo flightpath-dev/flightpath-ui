@@ -1,5 +1,5 @@
+import { accentToBgColor, accentToTextColor } from '../utils/accentToColor';
 import { cn } from '../utils/cn';
-import { getSurfaceBgColor, getSurfaceTextColor } from '../utils/surface-utils';
 
 import type { AccentColor } from '../types/AccentColor';
 import type { ReactNode, HTMLAttributes } from 'react';
@@ -21,8 +21,8 @@ export function Surface({
   return (
     <div
       className={cn(
-        getSurfaceBgColor(color),
-        getSurfaceTextColor(color, highContrast),
+        accentToBgColor(color),
+        accentToTextColor(color, highContrast),
         className,
       )}
       {...props}
