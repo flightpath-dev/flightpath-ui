@@ -29,14 +29,7 @@ export function MessageBar({ message, className }: MessageBarProps) {
   const colors = severityToColor(message ? message.severity : 'info');
 
   return (
-    <div
-      className={cn(
-        'border-t backdrop-blur-sm',
-        colors.bg,
-        colors.border,
-        className,
-      )}
-    >
+    <div className={cn(colors.bgContrast, colors.textContrast, className)}>
       <div className={cn('flex items-center gap-3 px-6 h-9', colors.text)}>
         {message && (
           <>

@@ -24,11 +24,11 @@ const getSeverity = (percentage: number): Severity => {
 };
 
 interface BatteryRemainingIndicatorProps {
-  padding?: string;
+  className?: string;
 }
 
 export function BatteryRemainingIndicator({
-  padding,
+  className,
 }: BatteryRemainingIndicatorProps) {
   const percentage = useBatteryRemaining();
   return (
@@ -37,7 +37,7 @@ export function BatteryRemainingIndicator({
       value={`${percentage}%`}
       icon={getIcon(percentage)}
       severity={getSeverity(percentage)}
-      className={padding}
+      className={className}
     />
   );
 }

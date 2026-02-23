@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import { MAVLinkServiceProvider } from './providers/MAVLinkServiceProvider';
 import { routes } from './routes';
 
-import '@flightpath/autopilot/globals.css';
+import './index.css';
 
 const root = createRoot(document.getElementById('root')!);
 const router = createBrowserRouter(routes);

@@ -20,11 +20,11 @@ const getSeverity = (percentage: number): Severity => {
 };
 
 interface SignalStrengthIndicatorProps {
-  padding?: string;
+  className?: string;
 }
 
 export function SignalStrengthIndicator({
-  padding,
+  className,
 }: SignalStrengthIndicatorProps) {
   // RSSI values: [0-254] are valid, 255 is invalid/unknown
   const rssi = useRemoteRssi();
@@ -37,7 +37,7 @@ export function SignalStrengthIndicator({
       value={isValid ? `${Math.round(percentage)}%` : '--%'}
       icon={getIcon(percentage)}
       severity={getSeverity(percentage)}
-      className={padding}
+      className={className}
     />
   );
 }

@@ -1,3 +1,4 @@
+import { cn } from '@flightpath/autopilot/utils/cn';
 import { severityToColor } from '@flightpath/autopilot/utils/severityToColor';
 
 import { useFlightStatus } from '../../providers/useServices';
@@ -26,10 +27,16 @@ export function FlightStatusIndicator({
 
   return (
     <div
-      className={`bg-black/90 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-md ${className}`}
+      className={cn(
+        'bg-black/90 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-md',
+        className,
+      )}
     >
       <div
-        className={`font-mono text-base font-bold whitespace-nowrap ${colors.text}`}
+        className={cn(
+          'font-mono text-base font-bold whitespace-nowrap',
+          colors.text,
+        )}
       >
         {STATUS_DISPLAY_TEXT_MAP[status.state]}
       </div>

@@ -20,12 +20,12 @@ export function MetricDisplay({
   unit,
   icon: Icon,
   severity = 'info',
-  className = '',
+  className,
 }: MetricDisplayProps) {
   const colors = severityToColor(severity);
 
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
+    <div className={cn('flex flex-col gap-1 px-4', className)}>
       <span className="text-muted-foreground text-xs">{label}</span>
       <div className="flex items-center gap-1.5">
         {Icon && <Icon className={cn('w-4 h-4', colors.text)} />}

@@ -11,11 +11,11 @@ function getFPSSeverity(fps: number): Severity {
 }
 
 interface FPSMeterProps {
-  padding?: string;
+  className?: string;
 }
 
 // Measures and displays frames per second (FPS) in real time
-export function FPSMeter({ padding }: FPSMeterProps) {
+export function FPSMeter({ className }: FPSMeterProps) {
   const [fps, setFps] = useState(60);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export function FPSMeter({ padding }: FPSMeterProps) {
       value={fps.toString()}
       unit="FPS"
       severity={getFPSSeverity(fps)}
-      className={padding}
+      className={className}
     />
   );
 }

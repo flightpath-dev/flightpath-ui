@@ -1,56 +1,59 @@
 import type { Severity } from '../types/Severity';
 
 /**
- * Color mapping for different severity levels.
- * Contains Tailwind CSS color classes for text, background, and border.
+ * Color mappings for a specific severity level.
+ * Usage:
+ * 1. `text` should be used on a default background, e.g. `bg-background`
+ * 2. `textMuted` should be used on a default background, e.g. `bg-background`
+ * 3. `textContrast` should only be used on `bgContrast`
  */
 export interface SeverityColors {
   text: string;
   textMuted: string;
-  bg: string;
-  border: string;
+  textContrast: string;
+  bgContrast: string;
 }
 
 /**
- * Maps severity levels to color schemes.
+ * Maps severity levels to SeverityColors.
  */
 const SEVERITY_COLOR_MAP: Record<Severity, SeverityColors> = {
   info: {
-    text: 'text-gray-400',
-    textMuted: 'text-gray-400/60',
-    bg: 'bg-gray-950/50',
-    border: 'border-gray-500/20',
+    text: 'text-foreground',
+    textMuted: 'text-muted-foreground',
+    textContrast: 'text-info-foreground',
+    bgContrast: 'bg-info',
   },
   success: {
-    text: 'text-green-400',
-    textMuted: 'text-green-400/60',
-    bg: 'bg-green-950/50',
-    border: 'border-green-500/20',
+    text: 'text-success',
+    textMuted: 'text-success/70',
+    textContrast: 'text-success-foreground',
+    bgContrast: 'bg-success',
   },
   warning: {
-    text: 'text-amber-400',
-    textMuted: 'text-amber-400/60',
-    bg: 'bg-amber-950/50',
-    border: 'border-amber-500/20',
+    text: 'text-warning',
+    textMuted: 'text-warning/70',
+    textContrast: 'text-warning-foreground',
+    bgContrast: 'bg-warning',
   },
   error: {
-    text: 'text-red-400',
-    textMuted: 'text-red-400/60',
-    bg: 'bg-red-950/50',
-    border: 'border-red-500/20',
+    text: 'text-error',
+    textMuted: 'text-error/70',
+    textContrast: 'text-error-foreground',
+    bgContrast: 'bg-error',
   },
 };
 
 /**
- * Maps a severity level to corresponding Tailwind CSS color classes.
+ * Maps a severity level to corresponding semantic color classes.
  *
  * @param severity - The severity level
- * @returns An object containing text, bg, and border color classes
+ * @returns An object containing text, textMuted, bg, and border color classes
  *
  * @example
  * const colors = severityToColor('error');
  * returns:
- * { text: 'text-red-400', textMuted: 'text-red-400/60', bg: 'bg-red-950/50', border: 'border-red-500/20' }
+ * { text: 'text-error', textMuted: 'text-error/70', bg: 'bg-error/10', border: 'border-error/20' }
  */
 export function severityToColor(severity: Severity): SeverityColors {
   return SEVERITY_COLOR_MAP[severity];
