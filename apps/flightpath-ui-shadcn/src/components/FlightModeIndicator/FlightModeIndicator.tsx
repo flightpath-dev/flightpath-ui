@@ -22,10 +22,10 @@ const MODE_DISPLAY_TEXT_MAP: Record<FlightMode, string> = {
 };
 
 interface FlightModeIndicatorProps {
-  padding?: string;
+  className?: string;
 }
 
-export function FlightModeIndicator({ padding }: FlightModeIndicatorProps) {
+export function FlightModeIndicator({ className }: FlightModeIndicatorProps) {
   const mode = useFlightMode();
   const displayText = MODE_DISPLAY_TEXT_MAP[mode] ?? mode;
 
@@ -33,7 +33,7 @@ export function FlightModeIndicator({ padding }: FlightModeIndicatorProps) {
     <MetricDisplay
       label="Flight Mode"
       value={displayText}
-      className={padding}
+      className={className}
     />
   );
 }

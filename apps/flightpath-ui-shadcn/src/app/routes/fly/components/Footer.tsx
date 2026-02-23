@@ -13,17 +13,17 @@ export function Footer() {
       <div className="flex items-stretch justify-between py-3">
         {/* Left Side: Flight Time and Telemetry */}
         <div className="flex items-stretch divide-x divide-border">
-          <FlightTimeDisplay padding="pl-6 pr-4" />
-          <TelemetryDisplay padding="px-4" />
+          <FlightTimeDisplay className="pl-6 pr-4" />
+          <TelemetryDisplay />
         </div>
 
         {/* Right Side: Secondary Indicators */}
         <div className="flex items-stretch divide-x divide-border">
-          <FlightModeIndicator padding="px-4" />
-          <SatelliteCountIndicator padding="px-4" />
-          <SignalStrengthIndicator padding="px-4" />
-          <BatteryRemainingIndicator padding="px-4" />
-          <FPSMeter padding="pl-4 pr-6" />
+          <FlightModeIndicator />
+          <SatelliteCountIndicator />
+          <SignalStrengthIndicator />
+          <BatteryRemainingIndicator />
+          <FPSMeter className="pl-4 pr-6" />
         </div>
       </div>
     </footer>

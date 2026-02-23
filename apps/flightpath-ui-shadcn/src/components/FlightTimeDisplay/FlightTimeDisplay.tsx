@@ -3,10 +3,10 @@ import { MetricDisplay } from '@flightpath/autopilot/components/MetricDisplay';
 import { useFlightTime } from '../../providers/useServices';
 
 interface FlightTimeDisplayProps {
-  padding?: string;
+  className?: string;
 }
 
-export function FlightTimeDisplay({ padding }: FlightTimeDisplayProps) {
+export function FlightTimeDisplay({ className }: FlightTimeDisplayProps) {
   const flightTime = useFlightTime();
 
   const formatFlightTime = (seconds: number) => {
@@ -20,7 +20,7 @@ export function FlightTimeDisplay({ padding }: FlightTimeDisplayProps) {
     <MetricDisplay
       label="Flight Time"
       value={formatFlightTime(flightTime)}
-      className={padding}
+      className={className}
     />
   );
 }

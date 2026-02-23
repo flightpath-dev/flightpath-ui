@@ -1,0 +1,4 @@
+@import '@flightpath/autopilot/globals.css';
+
+/* Scan this app so Tailwind includes classes used in stories. */
+@source "./**/*.{ts,tsx}";

@@ -6,7 +6,7 @@ import { useSatellites } from '../../providers/useServices';
 import type { Severity } from '@flightpath/autopilot/types/Severity';
 
 interface SatelliteCountIndicatorProps {
-  padding?: string;
+  className?: string;
 }
 
 function getSeverity(satellites: number): Severity {
@@ -16,7 +16,7 @@ function getSeverity(satellites: number): Severity {
 }
 
 export function SatelliteCountIndicator({
-  padding,
+  className,
 }: SatelliteCountIndicatorProps) {
   const satellites = useSatellites();
 
@@ -26,7 +26,7 @@ export function SatelliteCountIndicator({
       value={satellites}
       icon={Satellite}
       severity={getSeverity(satellites)}
-      className={padding}
+      className={className}
     />
   );
 }
