@@ -8,19 +8,24 @@ import {
   Controls,
   Stories,
 } from '@storybook/addon-docs/blocks';
+import { withThemeByClassName } from '@storybook/addon-themes';
 import { themes } from 'storybook/theming';
 
 import type { Preview } from '@storybook/react-vite';
 
 import '../src/index.css';
 
-// Apply class 'dark' to the <html> element of the Storybook preview iframe.
-// This triggers tailwind to go into dark mode.
-if (typeof document !== 'undefined') {
-  document.documentElement.classList.add('dark');
-}
-
 const preview: Preview = {
+  decorators: [
+    withThemeByClassName({
+      themes: {
+        light: '',
+        dark: 'dark',
+      },
+      defaultTheme: 'dark',
+    }),
+  ],
+
   parameters: {
     a11y: {
       // 'todo' - show a11y violations in the test UI only
