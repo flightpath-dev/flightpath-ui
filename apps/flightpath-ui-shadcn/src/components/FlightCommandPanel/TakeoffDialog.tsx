@@ -56,7 +56,7 @@ export function TakeoffDialog({ onTakeoff, trigger }: TakeoffDialogProps) {
         <DialogHeader>
           <DialogTitle>Confirm Takeoff</DialogTitle>
           <DialogDescription>
-            <Surface color="amber" className="p-3 mt-2">
+            <Surface accent="amber" className="p-3 mt-2">
               Confirm that the drone is outdoors with clear airspace above it.
               The drone will take off immediately upon confirmation.
             </Surface>

@@ -1,116 +1,140 @@
-import type { AccentColor } from '../types/AccentColor';
+import type { Accent } from '../types/Accent';
 
-export function accentToBgColor(color: AccentColor) {
-  switch (color) {
-    case 'red':
-      return 'bg-red-50 dark:bg-red-950/70';
-    case 'orange':
-      return 'bg-orange-50 dark:bg-orange-950/70';
-    case 'amber':
-      return 'bg-amber-50 dark:bg-amber-950/70';
-    case 'yellow':
-      return 'bg-yellow-50 dark:bg-yellow-950/70';
-    case 'lime':
-      return 'bg-lime-50 dark:bg-lime-950/70';
-    case 'green':
-      return 'bg-green-50 dark:bg-green-950/70';
-    case 'emerald':
-      return 'bg-emerald-50 dark:bg-emerald-950/70';
-    case 'teal':
-      return 'bg-teal-50 dark:bg-teal-950/70';
-    case 'cyan':
-      return 'bg-cyan-50 dark:bg-cyan-950/70';
-    case 'sky':
-      return 'bg-sky-50 dark:bg-sky-950/70';
-    case 'blue':
-      return 'bg-blue-50 dark:bg-blue-950/70';
-    case 'indigo':
-      return 'bg-indigo-50 dark:bg-indigo-950/70';
-    case 'violet':
-      return 'bg-violet-50 dark:bg-violet-950/70';
-    case 'purple':
-      return 'bg-purple-50 dark:bg-purple-950/70';
-    case 'fuchsia':
-      return 'bg-fuchsia-50 dark:bg-fuchsia-950/70';
-    case 'pink':
-      return 'bg-pink-50 dark:bg-pink-950/70';
-    case 'rose':
-      return 'bg-rose-50 dark:bg-rose-950/70';
-    // ---------- slightly elevated background than the default ----------
-    case 'slate':
-      return 'bg-slate-100 dark:bg-slate-800/70';
-    case 'gray':
-      return 'bg-gray-100 dark:bg-gray-800/70';
-    case 'zinc':
-      return 'bg-zinc-100 dark:bg-zinc-800/70';
-    case 'neutral':
-      return 'bg-neutral-100 dark:bg-neutral-800/70';
-    case 'stone':
-      return 'bg-stone-100 dark:bg-stone-800/70';
-    // -------------------------------------------------------------------
-  }
+/**
+ * Color mappings for a specific accent.
+ * Usage:
+ * 1. `text` should be used on a default background, e.g. `bg-background`
+ * 2. `textMuted` should be used on a default background, e.g. `bg-background`
+ * 3. `textContrast` should only be used on `bgContrast`
+ */
+export interface AccentColors {
+  text: string;
+  textMuted: string;
+  textContrast: string;
+  bgContrast: string;
 }
 
-export function accentToTextColor(
-  color: AccentColor,
-  highContrast: boolean = false,
-) {
-  switch (color) {
-    case 'red':
-      return 'text-red-700 dark:text-red-400';
-    case 'orange':
-      return 'text-orange-700 dark:text-orange-400';
-    case 'amber':
-      return 'text-amber-700 dark:text-amber-400';
-    case 'yellow':
-      return 'text-yellow-700 dark:text-yellow-400';
-    case 'lime':
-      return 'text-lime-700 dark:text-lime-400';
-    case 'green':
-      return 'text-green-700 dark:text-green-400';
-    case 'emerald':
-      return 'text-emerald-700 dark:text-emerald-400';
-    case 'teal':
-      return 'text-teal-700 dark:text-teal-400';
-    case 'cyan':
-      return 'text-cyan-700 dark:text-cyan-400';
-    case 'sky':
-      return 'text-sky-700 dark:text-sky-400';
-    case 'blue':
-      return 'text-blue-700 dark:text-blue-400';
-    case 'indigo':
-      return 'text-indigo-700 dark:text-indigo-400';
-    case 'violet':
-      return 'text-violet-700 dark:text-violet-400';
-    case 'purple':
-      return 'text-purple-700 dark:text-purple-400';
-    case 'fuchsia':
-      return 'text-fuchsia-700 dark:text-fuchsia-400';
-    case 'pink':
-      return 'text-pink-700 dark:text-pink-400';
-    case 'rose':
-      return 'text-rose-700 dark:text-rose-400';
-    // ---------- slightly elevated background than the default ----------
-    case 'slate':
-      return highContrast
-        ? 'text-foreground'
-        : 'text-slate-700 dark:text-slate-400';
-    case 'gray':
-      return highContrast
-        ? 'text-foreground'
-        : 'text-gray-700 dark:text-gray-400';
-    case 'zinc':
-      return highContrast
-        ? 'text-foreground'
-        : 'text-zinc-700 dark:text-zinc-400';
-    case 'neutral':
-      return highContrast
-        ? 'text-foreground'
-        : 'text-neutral-700 dark:text-neutral-400';
-    case 'stone':
-      return highContrast
-        ? 'text-foreground'
-        : 'text-stone-700 dark:text-stone-400';
-    // -------------------------------------------------------------------
-  }
+/**
+ * Maps accent values to AccentColors.
+ * Uses semantic color classes from globals.css (--color-{accent}, --color-{accent}-foreground).
+ */
+const ACCENT_COLOR_MAP: Record<Accent, AccentColors> = {
+  neutral: {
+    text: 'text-foreground',
+    textMuted: 'text-muted-foreground',
+    textContrast: 'text-neutral-foreground',
+    bgContrast: 'bg-neutral',
+  },
+  amber: {
+    text: 'text-amber',
+    textMuted: 'text-amber/70',
+    textContrast: 'text-amber-foreground',
+    bgContrast: 'bg-amber',
+  },
+  blue: {
+    text: 'text-blue',
+    textMuted: 'text-blue/70',
+    textContrast: 'text-blue-foreground',
+    bgContrast: 'bg-blue',
+  },
+  cyan: {
+    text: 'text-cyan',
+    textMuted: 'text-cyan/70',
+    textContrast: 'text-cyan-foreground',
+    bgContrast: 'bg-cyan',
+  },
+  emerald: {
+    text: 'text-emerald',
+    textMuted: 'text-emerald/70',
+    textContrast: 'text-emerald-foreground',
+    bgContrast: 'bg-emerald',
+  },
+  fuchsia: {
+    text: 'text-fuchsia',
+    textMuted: 'text-fuchsia/70',
+    textContrast: 'text-fuchsia-foreground',
+    bgContrast: 'bg-fuchsia',
+  },
+  green: {
+    text: 'text-green',
+    textMuted: 'text-green/70',
+    textContrast: 'text-green-foreground',
+    bgContrast: 'bg-green',
+  },
+  indigo: {
+    text: 'text-indigo',
+    textMuted: 'text-indigo/70',
+    textContrast: 'text-indigo-foreground',
+    bgContrast: 'bg-indigo',
+  },
+  lime: {
+    text: 'text-lime',
+    textMuted: 'text-lime/70',
+    textContrast: 'text-lime-foreground',
+    bgContrast: 'bg-lime',
+  },
+  orange: {
+    text: 'text-orange',
+    textMuted: 'text-orange/70',
+    textContrast: 'text-orange-foreground',
+    bgContrast: 'bg-orange',
+  },
+  pink: {
+    text: 'text-pink',
+    textMuted: 'text-pink/70',
+    textContrast: 'text-pink-foreground',
+    bgContrast: 'bg-pink',
+  },
+  purple: {
+    text: 'text-purple',
+    textMuted: 'text-purple/70',
+    textContrast: 'text-purple-foreground',
+    bgContrast: 'bg-purple',
+  },
+  red: {
+    text: 'text-red',
+    textMuted: 'text-red/70',
+    textContrast: 'text-red-foreground',
+    bgContrast: 'bg-red',
+  },
+  rose: {
+    text: 'text-rose',
+    textMuted: 'text-rose/70',
+    textContrast: 'text-rose-foreground',
+    bgContrast: 'bg-rose',
+  },
+  sky: {
+    text: 'text-sky',
+    textMuted: 'text-sky/70',
+    textContrast: 'text-sky-foreground',
+    bgContrast: 'bg-sky',
+  },
+  teal: {
+    text: 'text-teal',
+    textMuted: 'text-teal/70',
+    textContrast: 'text-teal-foreground',
+    bgContrast: 'bg-teal',
+  },
+  violet: {
+    text: 'text-violet',
+    textMuted: 'text-violet/70',
+    textContrast: 'text-violet-foreground',
+    bgContrast: 'bg-violet',
+  },
+  yellow: {
+    text: 'text-yellow',
+    textMuted: 'text-yellow/70',
+    textContrast: 'text-yellow-foreground',
+    bgContrast: 'bg-yellow',
+  },
+};
+
+/**
+ * Maps an accent to corresponding color classes.
+ *
+ * @param accent - The accent value
+ * @returns An object containing text, textMuted, textContrast, and bgContrast color classes
+ */
+export function accentToColor(accent: Accent): AccentColors {
+  return ACCENT_COLOR_MAP[accent];
 }

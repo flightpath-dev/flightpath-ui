@@ -79,7 +79,7 @@ function FlightCommandPanelBase({
         trigger={
           <CommandButton
             disabled={isMissionDisabled}
-            color={
+            accent={
               isMissionActive ? 'amber' : isMissionLoaded ? 'green' : undefined
             }
             className={

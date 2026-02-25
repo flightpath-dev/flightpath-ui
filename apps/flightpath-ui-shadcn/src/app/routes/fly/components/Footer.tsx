@@ -9,7 +9,7 @@ import { TelemetryDisplay } from '../../../../components/TelemetryDisplay/Teleme
 
 export function Footer() {
   return (
-    <footer className="bg-card/90 backdrop-blur-md border-t border-border">
+    <footer className="bg-card/90 border-t">
       <div className="flex items-stretch justify-between py-3">
         {/* Left Side: Flight Time and Telemetry */}
         <div className="flex items-stretch divide-x divide-border">

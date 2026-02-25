@@ -43,7 +43,7 @@ export function MissionStartDialog({
         <DialogHeader>
           <DialogTitle>Confirm Mission Start</DialogTitle>
           <DialogDescription>
-            <Surface color="amber" className="p-3 mt-2">
+            <Surface accent="amber" className="p-3 mt-2">
               Confirm that the airspace is clear and the mission path is safe.
               The drone will begin its autonomous mission immediately upon
               confirmation.
@@ -52,7 +52,7 @@ export function MissionStartDialog({
         </DialogHeader>
 
         {/* Mission Info */}
-        <Surface color="neutral" className="flex flex-col gap-3 p-3 my-1">
+        <Surface className="flex flex-col gap-3 p-3 my-1">
           <div className="flex items-center justify-between">
             <span className="text-sm">Mission Items</span>
             <span className="text-foreground text-xl font-mono">

@@ -61,6 +61,13 @@ const preview: Preview = {
       // See https://storybook.js.org/docs/configure/user-interface/theming
       theme: themes.dark,
     },
+
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: ['Overview', ['Colors'], 'Components'],
+      },
+    },
   },
 
   // Enable auto-generated documentation for all stories
