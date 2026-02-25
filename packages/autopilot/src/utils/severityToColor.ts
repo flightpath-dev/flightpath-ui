@@ -49,11 +49,6 @@ const SEVERITY_COLOR_MAP: Record<Severity, SeverityColors> = {
  *
  * @param severity - The severity level
  * @returns An object containing text, textMuted, bg, and border color classes
- *
- * @example
- * const colors = severityToColor('error');
- * returns:
- * { text: 'text-error', textMuted: 'text-error/70', bg: 'bg-error/10', border: 'border-error/20' }
  */
 export function severityToColor(severity: Severity): SeverityColors {
   return SEVERITY_COLOR_MAP[severity];

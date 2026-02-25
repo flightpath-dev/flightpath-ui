@@ -42,15 +42,53 @@
   --sidebar-border: oklch(0.922 0 0); /* Tailwind: neutral-200 */
   --sidebar-ring: oklch(0.708 0 0); /* Tailwind: neutral-400 */
 
-  /* custom severity colors */
-  --info: oklch(1 0 0); /* Tailwind: white */
-  --info-foreground: oklch(0.145 0 0); /* Tailwind: neutral-950 */
-  --success: oklch(0.648 0.2 131.684);
-  --success-foreground: oklch(0.986 0.031 120.757);
-  --warning: oklch(0.67 0.16 58);
-  --warning-foreground: oklch(0.99 0.02 95);
-  --error: oklch(0.577 0.245 27.325);
-  --error-foreground: oklch(0.971 0.013 17.38);
+  /* Custom severity colors */
+  --info: oklch(0.205 0 0); /* Tailwind: neutral-900 */
+  --info-foreground: oklch(0.985 0 0); /* Tailwind: neutral-50 */
+  --success: oklch(0.648 0.2 131.684); /* Tailwind: lime-600 */
+  --success-foreground: oklch(0.986 0.031 120.757); /* Tailwind: lime-50 */
+  --warning: oklch(0.67 0.16 58); /* Tailwind: ~amber-600: oklch(0.666 0.179 58.318) */
+  --warning-foreground: oklch(0.99 0.02 95); /* Tailwind: ~amber-50: oklch(0.987 0.022 95.277) */
+  --error: oklch(0.577 0.245 27.325); /* Tailwind: red-600 */
+  --error-foreground: oklch(0.971 0.013 17.38); /* Tailwind: red-50 */
+
+  /* Custom accent colors */
+  --neutral: oklch(0.205 0 0);
+  --neutral-foreground: oklch(0.985 0 0);
+  --amber: oklch(0.67 0.16 58);
+  --amber-foreground: oklch(0.99 0.02 95);
+  --blue: oklch(0.488 0.243 264.376);
+  --blue-foreground: oklch(0.97 0.014 254.604);
+  --cyan: oklch(0.61 0.11 222);
+  --cyan-foreground: oklch(0.98 0.02 201);
+  --emerald: oklch(0.6 0.13 163);
+  --emerald-foreground: oklch(0.98 0.02 166);
+  --fuchsia: oklch(0.59 0.26 323);
+  --fuchsia-foreground: oklch(0.98 0.02 320);
+  --green: oklch(0.648 0.2 131.684);
+  --green-foreground: oklch(0.986 0.031 120.757);
+  --indigo: oklch(0.51 0.23 277);
+  --indigo-foreground: oklch(0.96 0.02 272);
+  --lime: oklch(0.65 0.18 132);
+  --lime-foreground: oklch(0.99 0.03 121);
+  --orange: oklch(0.646 0.222 41.116);
+  --orange-foreground: oklch(0.98 0.016 73.684);
+  --pink: oklch(0.59 0.22 1);
+  --pink-foreground: oklch(0.97 0.01 343);
+  --purple: oklch(0.56 0.25 302);
+  --purple-foreground: oklch(0.98 0.01 308);
+  --red: oklch(0.577 0.245 27.325);
+  --red-foreground: oklch(0.971 0.013 17.38);
+  --rose: oklch(0.586 0.253 17.585);
+  --rose-foreground: oklch(0.969 0.015 12.422);
+  --sky: oklch(0.59 0.14 242);
+  --sky-foreground: oklch(0.98 0.01 237);
+  --teal: oklch(0.6 0.1 185);
+  --teal-foreground: oklch(0.98 0.01 181);
+  --violet: oklch(0.541 0.281 293.009);
+  --violet-foreground: oklch(0.969 0.016 293.756);
+  --yellow: oklch(0.852 0.199 91.936);
+  --yellow-foreground: oklch(0.421 0.095 57.708);
 }
 
 .dark {
@@ -86,15 +124,53 @@
   --sidebar-border: oklch(1 0 0 / 10%); /* Tailwind: white / 10% */
   --sidebar-ring: oklch(0.556 0 0); /* Tailwind: neutral-500 */
 
-  /* custom severity colors */
-  --info: oklch(0.145 0 0); /* Tailwind: neutral-950 */
-  --info-foreground: oklch(0.985 0 0); /* Tailwind: neutral-50 */
-  --success: oklch(0.648 0.2 131.684);
-  --success-foreground: oklch(0.986 0.031 120.757);
-  --warning: oklch(0.77 0.16 70);
-  --warning-foreground: oklch(0.28 0.07 46);
-  --error: oklch(0.637 0.237 25.331);
-  --error-foreground: oklch(0.971 0.013 17.38);
+  /* Custom severity colors */
+  --info: oklch(0.87 0 0); /* Tailwind: neutral-300 */
+  --info-foreground: oklch(0.205 0 0); /* Tailwind: neutral-900 */
+  --success: oklch(0.648 0.2 131.684); /* Tailwind: lime-600 */
+  --success-foreground: oklch(0.986 0.031 120.757); /* Tailwind: lime-50 */
+  --warning: oklch(0.77 0.16 70); /* Tailwind: ~orange-400: oklch(0.75 0.183 55.934) */
+  --warning-foreground: oklch(0.28 0.07 46); /* Tailwind: ~amber-950: oklch(0.279 0.077 45.635) */
+  --error: oklch(0.637 0.237 25.331); /* Tailwind: red-500 */
+  --error-foreground: oklch(0.971 0.013 17.38); /* Tailwind: red-50 */
+
+  /* Custom accent colors */
+  --neutral: oklch(0.87 0 0);
+  --neutral-foreground: oklch(0.205 0 0);
+  --amber: oklch(0.77 0.16 70);
+  --amber-foreground: oklch(0.28 0.07 46);
+  --blue: oklch(0.42 0.18 266);
+  --blue-foreground: oklch(0.97 0.014 254.604);
+  --cyan: oklch(0.71 0.13 215);
+  --cyan-foreground: oklch(0.3 0.05 230);
+  --emerald: oklch(0.7 0.15 162);
+  --emerald-foreground: oklch(0.26 0.05 173);
+  --fuchsia: oklch(0.67 0.26 322);
+  --fuchsia-foreground: oklch(0.98 0.02 320);
+  --green: oklch(0.648 0.2 131.684);
+  --green-foreground: oklch(0.986 0.031 120.757);
+  --indigo: oklch(0.59 0.2 277);
+  --indigo-foreground: oklch(0.96 0.02 272);
+  --lime: oklch(0.77 0.2 131);
+  --lime-foreground: oklch(0.27 0.07 132);
+  --orange: oklch(0.705 0.213 47.604);
+  --orange-foreground: oklch(0.98 0.016 73.684);
+  --pink: oklch(0.66 0.21 354);
+  --pink-foreground: oklch(0.97 0.01 343);
+  --purple: oklch(0.63 0.23 304);
+  --purple-foreground: oklch(0.98 0.01 308);
+  --red: oklch(0.637 0.237 25.331);
+  --red-foreground: oklch(0.971 0.013 17.38);
+  --rose: oklch(0.645 0.246 16.439);
+  --rose-foreground: oklch(0.969 0.015 12.422);
+  --sky: oklch(0.68 0.15 237);
+  --sky-foreground: oklch(0.29 0.06 243);
+  --teal: oklch(0.7 0.12 183);
+  --teal-foreground: oklch(0.28 0.04 193);
+  --violet: oklch(0.606 0.25 292.717);
+  --violet-foreground: oklch(0.969 0.016 293.756);
+  --yellow: oklch(0.795 0.184 86.047);
+  --yellow-foreground: oklch(0.421 0.095 57.708);
 }
 
 @theme inline {
@@ -149,6 +225,52 @@
   --color-error-foreground: var(--error-foreground);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
+
+  /*
+   * There are two ways to use the accent colors:
+   * 1. Pair a background color with the corresponding foreground color, e.g.
+   *    `bg-amber text-amber-foreground`
+   * 2. Pair a default background color with a accent color directly,
+   *    e.g. `bg-background text-amber`
+   *
+   * See Storybook Colors page for examples
+   */
+  --color-neutral: var(--neutral);
+  --color-neutral-foreground: var(--neutral-foreground);
+  --color-amber: var(--amber);
+  --color-amber-foreground: var(--amber-foreground);
+  --color-blue: var(--blue);
+  --color-blue-foreground: var(--blue-foreground);
+  --color-cyan: var(--cyan);
+  --color-cyan-foreground: var(--cyan-foreground);
+  --color-emerald: var(--emerald);
+  --color-emerald-foreground: var(--emerald-foreground);
+  --color-fuchsia: var(--fuchsia);
+  --color-fuchsia-foreground: var(--fuchsia-foreground);
+  --color-green: var(--green);
+  --color-green-foreground: var(--green-foreground);
+  --color-indigo: var(--indigo);
+  --color-indigo-foreground: var(--indigo-foreground);
+  --color-lime: var(--lime);
+  --color-lime-foreground: var(--lime-foreground);
+  --color-orange: var(--orange);
+  --color-orange-foreground: var(--orange-foreground);
+  --color-pink: var(--pink);
+  --color-pink-foreground: var(--pink-foreground);
+  --color-purple: var(--purple);
+  --color-purple-foreground: var(--purple-foreground);
+  --color-red: var(--red);
+  --color-red-foreground: var(--red-foreground);
+  --color-rose: var(--rose);
+  --color-rose-foreground: var(--rose-foreground);
+  --color-sky: var(--sky);
+  --color-sky-foreground: var(--sky-foreground);
+  --color-teal: var(--teal);
+  --color-teal-foreground: var(--teal-foreground);
+  --color-violet: var(--violet);
+  --color-violet-foreground: var(--violet-foreground);
+  --color-yellow: var(--yellow);
+  --color-yellow-foreground: var(--yellow-foreground);
 
   /* radius */
   --radius-sm: calc(var(--radius) - 4px);

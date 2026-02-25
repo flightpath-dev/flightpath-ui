@@ -1,28 +1,29 @@
-import { accentToBgColor, accentToTextColor } from '../utils/accentToColor';
+import { accentToColor } from '../utils/accentToColor';
 import { cn } from '../utils/cn';
 
-import type { AccentColor } from '../types/AccentColor';
+import type { Accent } from '../types/Accent';
 import type { ReactNode, HTMLAttributes } from 'react';
 
 export interface SurfaceProps extends HTMLAttributes<HTMLElement> {
   className?: string;
-  color: AccentColor;
-  highContrast?: boolean;
+  accent?: Accent;
+  contrast?: boolean;
   children: ReactNode;
 }
 
 export function Surface({
   className,
-  color,
-  highContrast = false,
+  accent = 'neutral',
+  contrast = false,
   children,
   ...props
 }: SurfaceProps) {
+  const colors = accentToColor(accent);
   return (
     <div
       className={cn(
-        accentToBgColor(color),
-        accentToTextColor(color, highContrast),
+        contrast ? colors.bgContrast : 'bg-card',
+        contrast ? colors.textContrast : colors.text,
         className,
       )}
       {...props}

@@ -26,14 +26,14 @@ function getIcon(severity: Severity) {
 }
 
 export function MessageBar({ message, className }: MessageBarProps) {
-  const colors = severityToColor(message ? message.severity : 'info');
+  const severity = message ? message.severity : 'info';
+  const colors = severityToColor(severity);
 
   return (
     <div
       className={cn(
-        'flex items-center h-9 gap-3 px-6',
-        colors.bgContrast,
-        colors.textContrast,
+        'bg-card/90 border-t flex items-center h-9 gap-3 px-6',
+        severity === 'info' ? colors.textMuted : colors.text,
         className,
       )}
     >
