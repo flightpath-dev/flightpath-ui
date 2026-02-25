@@ -28,7 +28,7 @@ export function FlightStatusIndicator({
   return (
     <div
       className={cn(
-        'bg-black/90 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-md',
+        'dark bg-black/90 backdrop-blur-md border rounded-md px-4 py-2.5',
         className,
       )}
     >

@@ -56,24 +56,32 @@ const meta = {
     },
   },
   args: {
+    children: 'This is a surface',
+
     accent: 'neutral',
     contrast: false,
-    children: 'This is a surface with some content',
-    className: 'p-2',
+    className: 'p-3',
   },
 } satisfies Meta<typeof Surface>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { docs: { canvas: { sourceState: 'hidden' } } },
+};
 
 export const Accents: Story = {
   render: (args) => (
     <div className="flex w-full max-w-md flex-col gap-3">
       {(Object.values(AccentEnum) as Accent[]).map((accent) => (
-        <Surface key={accent} {...args} accent={accent} className="p-2">
-          Surface with accent = {accent}
+        <Surface
+          key={accent}
+          {...args}
+          accent={accent}
+          className="p-3 text-center"
+        >
+          {accent}
         </Surface>
       ))}
     </div>
@@ -89,10 +97,10 @@ export const AccentsWithContrast: Story = {
           key={accent}
           {...args}
           accent={accent}
-          className="p-2"
+          className="p-3 text-center"
           contrast
         >
-          Surface with accent = {accent}
+          {accent}
         </Surface>
       ))}
     </div>
