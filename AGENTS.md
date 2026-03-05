@@ -36,8 +36,8 @@ server.
 
 ## Coding Style
 
-- Use TypeScript for all new files
-- Prefer `undefined` over `null` to represent the absence of a value. Use
+- **Use TypeScript** for all new files.
+- **Prefer `undefined` over `null` to represent the absence of a value.** Use
   `undefined` consistently for unset, missing, or cleared state. Avoid mixing
   `null` and `undefined` for the same semantic purpose.
   - Exception – context: Use `null` as the argument to createContext() when
@@ -47,6 +47,26 @@ server.
     ref.current (e.g. useRef<T>(null), ref.current = null). Reason: React uses
     null for DOM refs and the same convention for all refs keeps the rule
     simple.
+- **Do not use barreling.** Barreling is the practice of re-exporting multiple
+  modules from a single entry file (commonly `index.ts` or `index.js`) so that
+  consumers can import from a folder path instead of from individual files (e.g.
+  `import { Foo, Bar } from '../components'` instead of
+  `import { Foo } from '../components/Foo'` and
+  `import { Bar } from '../components/Bar'`). Avoid it in this project because:
+  - **Tree-shaking and bundle size:** Bundlers often pull in the whole barrel
+    when any symbol is used, so one import can pull in unrelated code and weaken
+    dead-code elimination.
+  - **Refactors and rename safety:** Moving or renaming a file forces updates to
+    the barrel and every re-export; direct file paths make the dependency
+    explicit and easier to update (e.g. with find-and-replace).
+  - **Discoverability and clarity:** Importing from the file that defines the
+    symbol (e.g. `from '../DroneServiceProvider/DroneServiceProvider'`) makes
+    the source of truth obvious; barrels hide where symbols actually live.
+  - **Circular dependencies:** Barrels can introduce or obscure circular
+    imports, which cause subtle runtime and build failures. Prefer importing
+    directly from the defining file:
+    `from '../DroneServiceProvider/DroneServiceProvider'` rather than
+    `from '../DroneServiceProvider'` or `from '../providers'`.
 
 ### Coding Style for imports
 
@@ -137,11 +157,63 @@ interface FlightCommandPanelProps {
 /**
  * FlightCommandPanel component for controlling drone flight operations.
  */
-function FlightCommandPanel({ className, onTakeoff }: FlightCommandPanelProps) {
+export function FlightCommandPanel({
+  className,
+  onTakeoff,
+}: FlightCommandPanelProps) {
   return (
     <div className={cn('flex flex-col bg-card rounded-lg py-2', className)}>
       <Button onClick={onTakeoff}>Takeoff</Button>
     </div>
   );
 }
+```
+
+## Repository Management
+
+We use one of two approaches to manage repositories:
+
+1. For simple projects, we use a **polyrepo** strategy where each project or
+   service is assigned its own independent repository.
+2. For complex projects, we use a **monorepo** strategy where all projects,
+   libraries and services are consolidated into a single repository.
+
+If a repository contains a `turbo.json` file at the root level, it is a monorepo
+otherwise it is a polyrepo. That's because we use
+[Turborepo](https://turborepo.dev/) to manage our monorepos and `turbo.json` is
+the configuration file for turborepo.
+
+## Dependencies Management
+
+We use [pnpm](https://pnpm.io/) as our package manager. Commands to add a new
+dependency to a repository depend on whether it is a polyrepo or a monorepo.
+
+### Adding a dependency to a polyrepo
+
+```shell
+# add a regular dependency
+pnpm add <pkg>
+
+# add a dev dependency
+pnpm add -D <pkg>
+
+# Example
+pnpm add date-fns
+```
+
+### Adding a dependency to a monorepo
+
+When installing a dependency in a monorepo, it should be installed directly in
+the package that uses it. The package's package.json will have every dependency
+that the package needs.
+
+```shell
+# add a regular dependency
+pnpm add <pkg> --filter <pkg_selector>
+
+# add a dev dependency
+pnpm add -D <pkg> --filter <pkg_selector>
+
+# Example
+pnpm add date-fns --filter @flightpath/autopilot
 ```
