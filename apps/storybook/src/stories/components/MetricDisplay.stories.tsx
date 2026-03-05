@@ -26,7 +26,7 @@ const meta = {
       control: 'text',
       description: 'The label shown above the value',
       table: {
-        type: { summary: 'string' },
+        type: { summary: 'string | undefined' },
       },
     },
     value: {
@@ -116,6 +116,12 @@ export const WithIcon: Story = {
         severity={SeverityEnum.Warning}
       />
     </div>
+  ),
+};
+
+export const WithoutLabel: Story = {
+  render: () => (
+    <MetricDisplay value="60" unit="FPS" severity={SeverityEnum.Success} />
   ),
 };
 

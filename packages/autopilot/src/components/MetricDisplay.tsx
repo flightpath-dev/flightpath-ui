@@ -6,7 +6,7 @@ import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 interface MetricDisplayProps {
-  label: string;
+  label?: string;
   value: ReactNode;
   unit?: string;
   icon?: LucideIcon;
@@ -26,7 +26,7 @@ export function MetricDisplay({
 
   return (
     <div className={cn('flex flex-col gap-1 px-4', className)}>
-      <span className="text-muted-foreground text-xs">{label}</span>
+      {label && <span className="text-muted-foreground text-xs">{label}</span>}
       <div className="flex items-center gap-1.5">
         {Icon && <Icon className={cn('w-4 h-4', colors.text)} />}
         <div className="flex items-baseline gap-1.5">
